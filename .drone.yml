@@ -1,0 +1,94 @@
+kind: pipeline
+type: docker
+name: test
+
+steps:
+  - name: Test Python
+    image: python:3.9
+    commands:
+      - ln -fs .env.development .env
+      - pip install -r requirements.txt
+      - pip install -r requirements-test.txt
+      - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > "${HOME}/bin/cc-test-reporter"
+      - chmod +x "${HOME}/bin/cc-test-reporter"
+      - flake8
+      - mypy app --ignore-missing-imports --strict
+      - cc-test-reporter before-build
+      - coverage run -m unittest discover
+      - exitcode="$?"
+      - coverage report -m
+      - coverage xml -i
+      - cc-test-reporter after-build --exit-code "$exitcode"
+    environment:
+      CC_TEST_REPORTER_ID: e42a05bff9c04dc4688b42419421a047b4d9c943f1734bc2f3180a7d2dae8f4f
+
+  - name: Test Node
+    image: node:16
+    commands:
+      - apt-get update && apt-get install -y fonts-liberation libappindicator3-1 libasound2 libatk-bridge2.0-0 libcups2 libgbm1 libgtk-3-0 libnspr4 libnss3 libx11-xcb1 libxss1 libxtst6 lsb-release xdg-utils
+      - ln -fs .env.development .env
+      - npm ci
+      - npm test
+
+  - name: Test Bash
+    image: koalaman/shellcheck-alpine:stable
+    commands:
+      - ln -fs .env.development .env
+      - shellcheck -x bin/*.sh
+
+  - name: Test Dockerfile
+    image: hadolint/hadolint:latest-alpine
+    commands:
+      - hadolint Dockerfile --ignore=DL3008 --ignore=SC2046 --ignore=SC2006
+
+  - name: Build Docker Container
+    depends_on:
+      - Test Python
+      - Test Node
+      - Test Bash
+      - Test Dockerfile
+    image: plugins/docker:19
+    settings:
+      repo: base-flask
+      tags: test
+      dry_run: true
+
+  #- name: Deploy
+  #  depends_on:
+  #    - Build Docker Container
+  #  image: appleboy/drone-ssh:1.6.3
+  #  settings:
+  #    host: $HOSTNAME
+  #    username: USERNAME
+  #    key_path: KEY_PATH
+  #    script:
+  #      - "$REPO_PATH/bin/deploy.sh master"
+  #  volumes:
+  #    - name: ssh_key
+  #      path: KEY_PATH
+  #  when:
+  #    branch:
+  #      - master
+
+
+---
+kind: pipeline
+type: docker
+name: refresh-varsnap-production-snaps
+steps:
+  - name: Refresh Varsnap Python Production Snaps
+    image: python:3.9
+    commands:
+      - ln -fs .env.development .env
+      - pip install -r requirements.txt
+      - pip install -r requirements-test.txt
+      - python baseflask/refresh_varsnap.py
+  - name: Refresh Varsnap Javascript Production Snaps
+    image: node:16
+    commands:
+      - ln -fs .env.development .env
+      - npm install
+      - node baseflask/refresh-varsnap.js
+trigger:
+  cron:
+    - refresh-varsnap-production-snaps
