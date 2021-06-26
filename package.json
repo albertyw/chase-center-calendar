@@ -1,5 +1,5 @@
 {
-  "name": "base-flask",
+  "name": "chase-center-calendar",
   "scripts": {
     "minify": "node bin/minify.js",
     "eslint": "eslint .",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/albertyw/base-flask.git"
+    "url": "git+https://github.com/albertyw/chase-center-calendar.git"
   },
   "license": "MIT",
   "private": true,
