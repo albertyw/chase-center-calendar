@@ -9,7 +9,7 @@ set -exuo pipefail
 IFS=$'\n\t'
 
 # Setup server
-sudo hostnamectl set-hostname "$HOSTNAME"
+sudo hostnamectl set-hostname "chasecentercalendar.com"
 
 # Clone repository
 cd ~
@@ -25,10 +25,10 @@ sudo usermod -aG docker "${USER}"
 # Configure nginx
 sudo rm /etc/nginx/nginx.conf
 sudo rm -rf /etc/nginx/sites-available
-sudo cp "$HOME/$PROJECT_NAME/config/nginx/nginx.conf" "/etc/nginx/nginx.conf"
-sudo cp "$HOME/$PROJECT_NAME/config/nginx/gzip.conf" "/etc/nginx/snippets/gzip.conf"
-sudo cp "$HOME/$PROJECT_NAME/config/nginx/headers.conf" "/etc/nginx/snippets/headers.conf"
-sudo cp "$HOME/$PROJECT_NAME/config/nginx/ssl.conf" "/etc/nginx/snippets/ssl.conf"
+sudo cp "$HOME/chase-center-calendar/config/nginx/nginx.conf" "/etc/nginx/nginx.conf"
+sudo cp "$HOME/chase-center-calendar/config/nginx/gzip.conf" "/etc/nginx/snippets/gzip.conf"
+sudo cp "$HOME/chase-center-calendar/config/nginx/headers.conf" "/etc/nginx/snippets/headers.conf"
+sudo cp "$HOME/chase-center-calendar/config/nginx/ssl.conf" "/etc/nginx/snippets/ssl.conf"
 sudo rm -rf /var/www/html
 
 # Secure nginx

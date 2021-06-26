@@ -8,7 +8,7 @@ IFS=$'\n\t'
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 cd "$DIR"/.. || exit 1
 
-CONTAINER="$PROJECT_NAME"
+CONTAINER="chase-center-calendar"
 PORT="$INTERNAL_PORT"
 NETWORK="$CONTAINER"_net
 DEPLOY_BRANCH="${1:-}"
@@ -50,6 +50,6 @@ if [ "$ENV" = "production" ]; then
     fi
 
     # Update nginx
-    sudo cp "$HOME/$PROJECT_NAME/config/nginx/app" "/etc/nginx/sites-enabled/$PROJECT_NAME-app"
+    sudo cp "$HOME/chase-center-calendar/config/nginx/app" "/etc/nginx/sites-enabled/chase-center-calendar-app"
     docker exec nginx /etc/init.d/nginx reload
 fi

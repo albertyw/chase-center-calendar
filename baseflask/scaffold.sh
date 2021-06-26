@@ -13,11 +13,11 @@ REPODIR="$BASEDIR/../"
 
 # Replace strings.  MODIFY REPLACEMENTS
 declare -A replacements
-replacements["\$REPO_PATH"]="\$REPO_PATH"                        # /home/abcd/website/
-replacements["\$HOSTNAME"]="\$HOSTNAME"                          # albertyw.com
-replacements["\$GIT_REPOSITORY"]="\$GIT_REPOSITORY"              # git@github.com:albertyw/albertyw.com
-replacements["\$PROJECT_NAME"]="\$PROJECT_NAME"                  # albertyw.com
-replacements["\$INTERNAL_PORT"]="\$INTERNAL_PORT"                # 5000
+replacements["\$REPO_PATH"]="/home/albertyw/chase-center-calendar"                        # /home/abcd/website/
+replacements["\$HOSTNAME"]="chasecentercalendar.com"                          # albertyw.com
+replacements["\$GIT_REPOSITORY"]="git@github.com:albertyw/chase-center-calendar"              # git@github.com:albertyw/albertyw.com
+replacements["\$PROJECT_NAME"]="chase-center-calendar"                  # albertyw.com
+replacements["\$INTERNAL_PORT"]="5013"                # 5000
 replacements["\$NEWRELIC_KEY"]="\$NEWRELIC_KEY"                  # abcdefgh
 replacements["\$ROLLBAR_SERVER_TOKEN"]="\$ROLLBAR_SERVER_TOKEN"  # abcdefgh
 replacements["\$ROLLBAR_CLIENT_TOKEN"]="\$ROLLBAR_CLIENT_TOKEN"  # abcdefgh
