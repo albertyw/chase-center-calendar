@@ -49,46 +49,23 @@ steps:
       - Test Dockerfile
     image: plugins/docker:19
     settings:
-      repo: base-flask
+      repo: chase-center-calendar
       tags: test
       dry_run: true
 
-  #- name: Deploy
-  #  depends_on:
-  #    - Build Docker Container
-  #  image: appleboy/drone-ssh:1.6.3
-  #  settings:
-  #    host: $HOSTNAME
-  #    username: USERNAME
-  #    key_path: KEY_PATH
-  #    script:
-  #      - "$REPO_PATH/bin/deploy.sh master"
-  #  volumes:
-  #    - name: ssh_key
-  #      path: KEY_PATH
-  #  when:
-  #    branch:
-  #      - master
-
-
----
-kind: pipeline
-type: docker
-name: refresh-varsnap-production-snaps
-steps:
-  - name: Refresh Varsnap Python Production Snaps
-    image: python:3.9
-    commands:
-      - ln -fs .env.development .env
-      - pip install -r requirements.txt
-      - pip install -r requirements-test.txt
-      - python baseflask/refresh_varsnap.py
-  - name: Refresh Varsnap Javascript Production Snaps
-    image: node:16
-    commands:
-      - ln -fs .env.development .env
-      - npm install
-      - node baseflask/refresh-varsnap.js
-trigger:
-  cron:
-    - refresh-varsnap-production-snaps
+  - name: Deploy
+    depends_on:
+      - Build Docker Container
+    image: appleboy/drone-ssh:1.6.3
+    settings:
+      host: direct.albertyw.com
+      username: albertyw
+      key_path: /root/ssh/id_ed25519
+      script:
+        - "/home/albertyw/albertyw.com/bin/deploy.sh master"
+    volumes:
+      - name: ssh_key
+        path: /root/ssh/id_ed25519
+    when:
+      branch:
+        - master
