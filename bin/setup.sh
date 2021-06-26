@@ -13,7 +13,7 @@ sudo hostnamectl set-hostname "chasecentercalendar.com"
 
 # Clone repository
 cd ~
-git clone "$GIT_REPOSITORY"
+git clone "git@github.com:albertyw/chase-center-calendar"
 
 # Set up docker
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -

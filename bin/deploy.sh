@@ -9,7 +9,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 cd "$DIR"/.. || exit 1
 
 CONTAINER="chase-center-calendar"
-PORT="$INTERNAL_PORT"
+PORT="5013"
 NETWORK="$CONTAINER"_net
 DEPLOY_BRANCH="${1:-}"
 BRANCH="$(git rev-parse --abbrev-ref HEAD)"
