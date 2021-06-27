@@ -5,7 +5,7 @@
 [![Code Climate](https://codeclimate.com/github/albertyw/base-flask/badges/gpa.svg)](https://codeclimate.com/github/albertyw/base-flask)
 [![Test Coverage](https://codeclimate.com/github/albertyw/base-flask/badges/coverage.svg)](https://codeclimate.com/github/albertyw/base-flask/coverage)
 [![Hound CI](https://img.shields.io/badge/houndci-monitored-blue.svg)](https://houndci.com/)
-[![Varsnap Status](https://www.varsnap.com/project/bcc034eb-19df-42dc-aa30-8765868f10ec/varsnap_badge.svg)](https://www.varsnap.com/project/bcc034eb-19df-42dc-aa30-8765868f10ec/)
+[![Varsnap Status](https://www.varsnap.com/project/e671c842-e385-4ce0-a321-7d8659906c68/varsnap_badge.svg)](https://www.varsnap.com/project/e671c842-e385-4ce0-a321-7d8659906c68/)
 
 This is a base Flask/uWSGI/nginx setup, useful as a skeleton for building
 simple web apps from.  This is meant to be used for websites, as opposed to
