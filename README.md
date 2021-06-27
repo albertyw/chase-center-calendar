@@ -1,40 +1,10 @@
-# Base Flask Setup
+# Chase Center Calendar
 
 [![Build Status](https://drone.albertyw.com/api/badges/albertyw/chase-center-calendar/status.svg)](https://drone.albertyw.com/albertyw/chase-center-calendar)
 [![Varsnap Status](https://www.varsnap.com/project/e671c842-e385-4ce0-a321-7d8659906c68/varsnap_badge.svg)](https://www.varsnap.com/project/e671c842-e385-4ce0-a321-7d8659906c68/)
 
-This is a base Flask/uWSGI/nginx setup, useful as a skeleton for building
-simple web apps from.  This is meant to be used for websites, as opposed to
-pure JSON sites which would be better developed using a different language or
-framework (e.g. [sanic](https://github.com/channelcat/sanic)).
-
-Features
---------
-
- - Developed specifically for Python 3
- - Minimal but up-to-date python dependencies
- - 100% test coverage
- - No issues from Code Climate
- - PEP8 compliant
- - Documented setup and usage procedures
- - Includes setting up secure and fast nginx/uwsgi in production
- - Docker support
-
-Setup
------
-
-Modify and run `baseflask/scaffold.sh` to create a copy of base-flask for your
-project needs, then run `bin/setup.sh` to set up the host.
-
-Base-flask is designed to work with a minimally sized [AWS EC2](https://aws.amazon.com/ec2/instance-types/)
-or [DigitalOcean](https://www.digitalocean.com/pricing/)
-instance, running a modern version of Ubuntu (20.04 LTS recommended).
-
-### CDN
-
-A CDN like [cloudflare](https://www.cloudflare.com/) can also be added on to boost
-speed.  A good cloudflare setup would be to use full SSL encryption and to
-install an origin certificate so that requests are encrypted end-to-end.
+This website generates an iCal format calendar of Chase Center events, importable into
+Google Calendar, Apple Calendar, and many other calendar apps
 
 Development
 -----------
@@ -47,11 +17,6 @@ pip install -r requirements.txt
 pip install -r requirements-test.txt
 ln -s .env.development .env
 npm install
-
-# Install shellcheck
-# brew install shellcheck
-# sudo apt-get install shellcheck
-
 ```
 
 ### Spinning up the server:
@@ -69,54 +34,4 @@ mypy app --ignore-missing-imports --strict
 shellcheck --exclude=SC1091 bin/*.sh
 coverage run -m unittest discover
 npm test
-```
-
-### CI/CD
-
-This repo uses:
-
-```bash
-# Switch to python 3
-pyenv local 3.9
-pip install -r requirements.txt
-pip install -r requirements-test.txt
-ln -s .env.development .env
-
-# Test
-flake8
-mypy app --ignore-missing-imports --strict
-shellcheck --exclude=SC1091 bin/*.sh
-coverage run -m unittest discover
-coverage report
-codeclimate-test-reporter
-npm test
-
-# Deployment
-ssh example.com website/bin/deploy.sh
-```
-
-### Building and starting the docker container
-
-```bash
-docker build -t $PROJECT_NAME:test .
-docker run -t -i -p 127.0.0.1:$INTERNAL_PORT:$INTERNAL_PORT $PROJECT_NAME:test
-```
-
-Production
-----------
-
-### Setup
-
-Run this once on a new server to set up the web app:
-
-```bash
-bin/setup.sh
-```
-
-### Deployment
-
-Run this every time for a new commit to the repository:
-
-```bash
-bin/deploy.sh
 ```
