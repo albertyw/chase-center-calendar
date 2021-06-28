@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 from typing import List, Mapping, Optional, Union, cast
 
 import requests
@@ -43,7 +43,7 @@ class Event():
         self.title = cast(str, data['title'])
         self.subtitle = cast(Optional[str], data['subtitle'])
         self.date_string = cast(str, data['date'])
-        self.date = datetime.fromisoformat(self.date_string)
+        self.date = datetime.datetime.fromisoformat(self.date_string)
         self.location_name = cast(Optional[str], data['locationName'])
         self.location_type = cast(Optional[str], data['locationType'])
         self.ticket_required = cast(bool, data['ticketRequired'])
@@ -51,6 +51,14 @@ class Event():
         self.ticket_sold_out = cast(bool, data['ticketSoldOut'])
         self.hide_road_game = cast(Optional[bool], data['hideRoadGame'])
         self.duration = cast(int, data['duration'])
+
+    @property
+    def show(self) -> bool:
+        if self.hide_road_game:
+            return False
+        if self.date < datetime.datetime.now() - datetime.timedelta(days=1):
+            return False
+        return True
 
 
 def get_raw_events() -> RawQueryResponse:
