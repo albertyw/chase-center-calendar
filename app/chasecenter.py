@@ -4,7 +4,7 @@ from typing import List, Mapping, Optional, Union, cast
 import requests
 
 
-FieldValues = Union[Optional[str], str, Optional[bool], bool, float]
+FieldValues = Union[Optional[str], str, Optional[bool], bool, int]
 RawEvent = Mapping[str, Mapping[str, FieldValues]]
 RawQueryResponse = Mapping[str, Mapping[str, Mapping[str, List[RawEvent]]]]
 
@@ -50,7 +50,7 @@ class Event():
         self.ticket_available = cast(bool, data['ticketAvailable'])
         self.ticket_sold_out = cast(bool, data['ticketSoldOut'])
         self.hide_road_game = cast(Optional[bool], data['hideRoadGame'])
-        self.duration = cast(float, data['duration'])
+        self.duration = cast(int, data['duration'])
 
 
 def get_raw_events() -> RawQueryResponse:
@@ -59,3 +59,10 @@ def get_raw_events() -> RawQueryResponse:
     }
     response = requests.post(URL, data=data)
     return cast(RawQueryResponse, response.json())
+
+
+def get_events() -> List[Event]:
+    raw_data = get_raw_events()
+    raw_events = raw_data['data']['contentByType']['items']
+    events = [Event(e) for e in raw_events]
+    return events
