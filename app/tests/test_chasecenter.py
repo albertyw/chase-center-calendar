@@ -10,7 +10,7 @@ EXAMPLE_RAW_EVENT = {
         "slug": None,
         "title": "Tame Impala",
         "subtitle": "example subtitle",
-        "date": "2021-09-15T19:30",
+        "date": "2020-09-15T19:30",
         "locationName": "Chase Center, San Francisco",
         "locationType": "arena",
         "ticketRequired": True,
@@ -31,7 +31,7 @@ class TestEvent(TestCase):
         self.assertEqual(event.title, data['title'])
         self.assertEqual(event.subtitle, data['subtitle'])
         self.assertEqual(event.date_string, data['date'])
-        self.assertEqual(event.date, datetime(2021, 9, 15, 19, 30))
+        self.assertEqual(event.date, datetime(2020, 9, 15, 19, 30))
         self.assertEqual(event.location_name, data['locationName'])
         self.assertEqual(event.location_type, data['locationType'])
         self.assertEqual(event.ticket_required, data['ticketRequired'])
@@ -39,6 +39,16 @@ class TestEvent(TestCase):
         self.assertEqual(event.ticket_sold_out, data['ticketSoldOut'])
         self.assertEqual(event.hide_road_game, data['hideRoadGame'])
         self.assertEqual(event.duration, data['duration'])
+
+    def test_show(self) -> None:
+        event = chasecenter.Event(EXAMPLE_RAW_EVENT)
+        event.date = datetime(3000, 1, 1)
+        self.assertTrue(event.show)
+        event.date = datetime(1000, 1, 1)
+        self.assertFalse(event.show)
+        event.date = datetime(3000, 1, 1)
+        event.hide_road_game = True
+        self.assertFalse(event.show)
 
 
 class TestGetRawEvents(TestCase):
