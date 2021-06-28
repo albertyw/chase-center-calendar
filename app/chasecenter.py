@@ -49,7 +49,7 @@ class Event():
         self.ticket_required = cast(bool, data['ticketRequired'])
         self.ticket_available = cast(bool, data['ticketAvailable'])
         self.ticket_sold_out = cast(bool, data['ticketSoldOut'])
-        self.hide_road_game = cast(Optional[bool], data['hideRoadGame'])
+        self.hide_road_game = data['hideRoadGame'] == 'yes'
         self.duration = cast(int, data['duration'])
 
     @property

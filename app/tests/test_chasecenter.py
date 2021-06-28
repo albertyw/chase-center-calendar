@@ -37,7 +37,7 @@ class TestEvent(TestCase):
         self.assertEqual(event.ticket_required, data['ticketRequired'])
         self.assertEqual(event.ticket_available, data['ticketAvailable'])
         self.assertEqual(event.ticket_sold_out, data['ticketSoldOut'])
-        self.assertEqual(event.hide_road_game, data['hideRoadGame'])
+        self.assertEqual(event.hide_road_game, False)
         self.assertEqual(event.duration, data['duration'])
 
     def test_show(self) -> None:
