@@ -65,4 +65,5 @@ def get_events() -> List[Event]:
     raw_data = get_raw_events()
     raw_events = raw_data['data']['contentByType']['items']
     events = [Event(e) for e in raw_events]
+    events = sorted(events, key=lambda e: e.date)
     return events
