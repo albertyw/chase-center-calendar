@@ -4,7 +4,7 @@ from typing import List, Mapping, Optional, Union, cast
 import requests
 
 
-FieldValues = Union[Optional[str], str, Optional[bool], bool, int]
+FieldValues = Union[None, str, bool, int]
 RawEvent = Mapping[str, Mapping[str, FieldValues]]
 RawQueryResponse = Mapping[str, Mapping[str, Mapping[str, List[RawEvent]]]]
 
