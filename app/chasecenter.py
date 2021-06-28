@@ -59,7 +59,8 @@ class Event():
     def show(self) -> bool:
         if self.hide_road_game:
             return False
-        if self.date < datetime.datetime.now(TIMEZONE) - datetime.timedelta(days=1):
+        cutoff = datetime.datetime.now(TIMEZONE) - datetime.timedelta(days=1)
+        if self.date < cutoff:
             return False
         return True
 
