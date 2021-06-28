@@ -1,6 +1,7 @@
 import datetime
 from typing import List, Mapping, Optional, Union, cast
 
+import pytz
 import requests
 
 
@@ -33,6 +34,7 @@ QUERY = """
   }
 }
 """
+TIMEZONE = pytz.timezone('America/Los_Angeles')
 
 
 class Event():
@@ -44,6 +46,7 @@ class Event():
         self.subtitle = cast(Optional[str], data['subtitle'])
         self.date_string = cast(str, data['date'])
         self.date = datetime.datetime.fromisoformat(self.date_string)
+        self.date = TIMEZONE.localize(self.date)
         self.location_name = cast(Optional[str], data['locationName'])
         self.location_type = cast(Optional[str], data['locationType'])
         self.ticket_required = cast(bool, data['ticketRequired'])
@@ -56,7 +59,7 @@ class Event():
     def show(self) -> bool:
         if self.hide_road_game:
             return False
-        if self.date < datetime.datetime.now() - datetime.timedelta(days=1):
+        if self.date < datetime.datetime.now(TIMEZONE) - datetime.timedelta(days=1):
             return False
         return True
 
