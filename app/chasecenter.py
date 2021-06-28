@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List, Mapping, Optional, Union, cast
 
 import requests
@@ -32,6 +33,24 @@ QUERY = """
   }
 }
 """
+
+
+class Event():
+    def __init__(self, event_data: RawEvent) -> None:
+        data = event_data['fields']
+        self.id = cast(Optional[str], data['id'])
+        self.slug = cast(Optional[str], data['slug'])
+        self.title = cast(str, data['title'])
+        self.subtitle = cast(Optional[str], data['subtitle'])
+        self.date_string = cast(str, data['date'])
+        self.date = datetime.fromisoformat(self.date_string)
+        self.location_name = cast(Optional[str], data['locationName'])
+        self.location_type = cast(Optional[str], data['locationType'])
+        self.ticket_required = cast(bool, data['ticketRequired'])
+        self.ticket_available = cast(bool, data['ticketAvailable'])
+        self.ticket_sold_out = cast(bool, data['ticketSoldOut'])
+        self.hide_road_game = cast(Optional[bool], data['hideRoadGame'])
+        self.duration = cast(float, data['duration'])
 
 
 def get_raw_events() -> RawQueryResponse:
