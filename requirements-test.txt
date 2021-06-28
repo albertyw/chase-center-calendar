@@ -1,4 +1,7 @@
 # Testing
 coverage==5.5                    # Test coverage
 flake8==3.9.2                    # Python linting
+
+# Types
 mypy==0.902                      # Type checking
+types-requests==0.1.10           # Type stubs for requests package
