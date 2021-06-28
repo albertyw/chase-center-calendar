@@ -3,14 +3,15 @@ from typing import Any
 from flask import Blueprint, render_template
 from varsnap import varsnap
 
+from app import chasecenter
 
 handlers = Blueprint('handlers', __name__)
 
 
 @handlers.route("/")
-@varsnap
 def index() -> Any:
-    return render_template("index.htm")
+    events = chasecenter.get_events()
+    return render_template("index.htm", events=events)
 
 
 @handlers.route("/about")

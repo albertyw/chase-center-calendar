@@ -4,5 +4,27 @@
   {{ super() }}
 {% endblock %}
 {% block content %}
-  CONTENT
+  <div>
+    <h1>Chase Center Calendar</h1>
+    <div id="events">
+      {% for event in events %}
+        <div id="event">
+          <h1>{{ event.title }}</h1>
+          <h2>{{ event.date }}</h2>
+          ID: {{ event.id }}<br />
+          Slug: {{ event.slug }}<br />
+          Title: {{ event.title }}<br />
+          Subtitle: {{ event.subtitle }}<br />
+          Date: {{ event.date }}<br />
+          Location Name: {{ event.locationName }}<br />
+          Location Type: {{ event.locationType }}<br />
+          Ticket Required: {{ event.ticketRequired }}<br />
+          Ticket Available: {{ event.ticketAvailable }}<br />
+          Ticket Sold Out: {{ event.ticketSoldOut }}<br />
+          Hide Road Game: {{ event.hideRoadGame }}<br />
+          Duration (Hours): {{ event.duration }}<br />
+        </div>
+      {% endfor %}
+    </div>
+  </div>
 {% endblock %}
