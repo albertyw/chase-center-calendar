@@ -12,10 +12,17 @@ EXAMPLE_EVENT = chasecenter.Event(EXAMPLE_RAW_EVENT)
 
 class TestGenerateCalendar(TestCase):
     def test_generate_empty(self) -> None:
-        cal = str(ical.generate_calendar([]))
+        cal = ical.generate_calendar([])
         self.assertIn('Chase Center Events', cal)
         self.assertIn('BEGIN:VCALENDAR', cal)
         self.assertIn('END:VCALENDAR', cal)
+
+    def test_generate(self) -> None:
+        cal = ical.generate_calendar([EXAMPLE_EVENT])
+        self.assertIn('DTSTART:', cal)
+        self.assertIn('SUMMARY:Tame Impala', cal)
+        self.assertIn('DESCRIPTION:example subtitle', cal)
+        self.assertIn('LOCATION:Chase Center\\, San Francisco', cal)
 
 
 class TestDateString(TestCase):
