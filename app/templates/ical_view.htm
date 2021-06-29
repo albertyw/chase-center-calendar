@@ -1,0 +1,16 @@
+{% extends "includes/base.htm" %}
+{% block title %}TITLE{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <div>
+    <h1>Chase Center Calendar iCal</h1>
+    <div id="info">
+      <p>
+        This is the iCal data that can be loaded into Google Calendar, Apple Calendar, etc
+      </p>
+      <pre>{{ cal }}</pre>
+    </div>
+  </div>
+{% endblock %}

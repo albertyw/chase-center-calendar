@@ -64,6 +64,10 @@ class Event():
             return False
         return True
 
+    @property
+    def end(self) -> datetime.datetime:
+        return self.date + datetime.timedelta(hours=self.duration)
+
 
 def get_raw_events() -> RawQueryResponse:
     data = {
