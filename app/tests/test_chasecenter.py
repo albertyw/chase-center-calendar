@@ -51,6 +51,11 @@ class TestEvent(TestCase):
         event.hide_road_game = True
         self.assertFalse(event.show)
 
+    def test_end(self) -> None:
+        event = chasecenter.Event(EXAMPLE_RAW_EVENT)
+        expected = chasecenter.TIMEZONE.localize(datetime(2020, 9, 15, 22, 30))
+        self.assertEqual(event.end, expected)
+
 
 class TestGetRawEvents(TestCase):
     def test_get_events(self) -> None:
