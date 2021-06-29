@@ -31,7 +31,8 @@ class TestEvent(TestCase):
         self.assertEqual(event.title, data['title'])
         self.assertEqual(event.subtitle, data['subtitle'])
         self.assertEqual(event.date_string, data['date'])
-        self.assertEqual(event.date, datetime(2020, 9, 15, 19, 30))
+        expected = chasecenter.TIMEZONE.localize(datetime(2020, 9, 15, 19, 30))
+        self.assertEqual(event.date, expected)
         self.assertEqual(event.location_name, data['locationName'])
         self.assertEqual(event.location_type, data['locationType'])
         self.assertEqual(event.ticket_required, data['ticketRequired'])
@@ -42,11 +43,11 @@ class TestEvent(TestCase):
 
     def test_show(self) -> None:
         event = chasecenter.Event(EXAMPLE_RAW_EVENT)
-        event.date = datetime(3000, 1, 1)
+        event.date = datetime(3000, 1, 1, tzinfo=chasecenter.TIMEZONE)
         self.assertTrue(event.show)
-        event.date = datetime(1000, 1, 1)
+        event.date = datetime(1000, 1, 1, tzinfo=chasecenter.TIMEZONE)
         self.assertFalse(event.show)
-        event.date = datetime(3000, 1, 1)
+        event.date = datetime(3000, 1, 1, tzinfo=chasecenter.TIMEZONE)
         event.hide_road_game = True
         self.assertFalse(event.show)
 
