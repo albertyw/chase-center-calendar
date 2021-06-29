@@ -19,7 +19,8 @@ class TestGenerateCalendar(TestCase):
 
     def test_generate(self) -> None:
         cal = ical.generate_calendar([EXAMPLE_EVENT])
-        self.assertIn('DTSTART:', cal)
+        self.assertIn('DTSTART:20200916T023000Z', cal)
+        self.assertIn('DTEND:20200916T053000Z', cal)
         self.assertIn('SUMMARY:Tame Impala', cal)
         self.assertIn('DESCRIPTION:example subtitle', cal)
         self.assertIn('LOCATION:Chase Center\\, San Francisco', cal)
