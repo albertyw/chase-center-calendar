@@ -27,6 +27,11 @@ class PageCase(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertIn(b'Not Found', response.get_data())
 
+    def test_about(self) -> None:
+        response = self.app.get('/about')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Chase Center Calendar', response.get_data())
+
     def page_test(self, path: str, string: bytes) -> None:
         response = self.app.get(path)
         self.assertEqual(response.status_code, 200)
