@@ -3,6 +3,7 @@ from typing import List, Mapping, Optional, Union, cast
 
 import pytz
 import requests
+from varsnap import varsnap
 
 
 FieldValues = Union[None, str, bool, int]
@@ -56,6 +57,7 @@ class Event():
         self.duration = cast(int, data['duration'])
 
     @property
+    @varsnap
     def show(self) -> bool:
         if self.hide_road_game:
             return False
@@ -65,6 +67,7 @@ class Event():
         return True
 
     @property
+    @varsnap
     def end(self) -> datetime.datetime:
         return self.date + datetime.timedelta(hours=self.duration)
 

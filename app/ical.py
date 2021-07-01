@@ -3,10 +3,12 @@ from typing import List
 
 from icalendar import Calendar, Event
 import pytz
+from varsnap import varsnap
 
 from app import chasecenter
 
 
+@varsnap
 def generate_calendar(events: List[chasecenter.Event]) -> str:
     cal = Calendar()
     cal['summary'] = 'Chase Center Events'
@@ -16,6 +18,7 @@ def generate_calendar(events: List[chasecenter.Event]) -> str:
     return str(cal.to_ical().decode('utf-8'))
 
 
+@varsnap
 def generate_calendar_event(event: chasecenter.Event) -> Event:
     cal_event = Event()
     cal_event['uid'] = event.id
@@ -27,6 +30,7 @@ def generate_calendar_event(event: chasecenter.Event) -> Event:
     return cal_event
 
 
+@varsnap
 def date_string(dt: datetime.datetime) -> str:
     utc = dt.astimezone(pytz.utc).replace(tzinfo=None)
     formatted = utc.isoformat()
