@@ -56,7 +56,7 @@ class Event():
         self.hide_road_game = data['hideRoadGame'] == 'yes'
         self.duration = cast(int, data['duration'])
 
-    @property
+    @property  # type: ignore
     @varsnap
     def show(self) -> bool:
         if self.hide_road_game:
@@ -66,7 +66,7 @@ class Event():
             return False
         return True
 
-    @property
+    @property  # type: ignore
     @varsnap
     def end(self) -> datetime.datetime:
         return self.date + datetime.timedelta(hours=self.duration)
