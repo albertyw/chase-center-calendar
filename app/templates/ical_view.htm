@@ -8,7 +8,15 @@
     <h1>Chase Center Calendar iCal</h1>
     <div id="info">
       <p>
-        This is the iCal data that can be loaded into Google Calendar, Apple Calendar, etc
+        This is the iCal data that can be loaded into Google Calendar, Apple Calendar, etc.
+      </p>
+      <p>
+        Import this URL into your calendaring app:
+        <pre>{{ url_for('handlers.ical_file', _external=True) }}</pre>
+      </p>
+      <p>
+        Alternatively, you can download the calendar but you will not be able to automatically synchronize updates:
+        <a href="{{ url_for('handlers.ical_file') }}">Download Non-Synchronized Calendar</a>
       </p>
       <pre>{{ cal }}</pre>
     </div>
