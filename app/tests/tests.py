@@ -32,6 +32,11 @@ class PageCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Chase Center Calendar', response.get_data())
 
+    def test_ical_file(self) -> None:
+        response = self.app.get('/chasecenter.ics')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'BEGIN:VCALENDAR', response.get_data())
+
     def test_ical_view(self) -> None:
         response = self.app.get('/ical_view')
         self.assertEqual(response.status_code, 200)
