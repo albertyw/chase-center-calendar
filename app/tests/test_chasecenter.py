@@ -93,3 +93,14 @@ class TestGetEvents(TestCase):
         self.assertEqual(events, [event])
         self.assertEqual(chasecenter.CachedEvents, [event])
         self.assertFalse(mock_get_raw_events.called)
+
+    @patch('app.chasecenter.get_raw_events')
+    def test_caches_events(self, mock_get_raw_events: MagicMock) -> None:
+        mock_get_raw_events.return_value = \
+            {'data': {'contentByType': {'items': [EXAMPLE_RAW_EVENT]}}}
+        events_1 = chasecenter.get_events()
+        self.assertTrue(mock_get_raw_events.called)
+        mock_get_raw_events.reset_mock()
+        events_2 = chasecenter.get_events()
+        self.assertFalse(mock_get_raw_events.called)
+        self.assertEqual(events_1, events_2)
