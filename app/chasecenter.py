@@ -1,4 +1,5 @@
 import datetime
+import random
 from typing import List, Mapping, Optional, Union, cast
 
 import pytz
@@ -82,7 +83,6 @@ def get_raw_events() -> RawQueryResponse:
 
 CachedEvents: List[Event] = []
 CachedEventsExpire = datetime.datetime.now()
-CACHED_EVENTS_DURATION = datetime.timedelta(hours=1)
 
 
 def get_events() -> List[Event]:
@@ -93,6 +93,12 @@ def get_events() -> List[Event]:
     raw_events = raw_data['data']['contentByType']['items']
     events = [Event(e) for e in raw_events]
     events = sorted(events, key=lambda e: e.date)
-    CachedEvents = events
-    CachedEventsExpire = datetime.datetime.now() + CACHED_EVENTS_DURATION
+    _refresh_cache(events)
     return events
+
+
+def _refresh_cache(events: List[Event]) -> None:
+    global CachedEvents, CachedEventsExpire
+    CachedEvents = events
+    cache_duration = datetime.timedelta(minutes=random.randint(30, 90))
+    CachedEventsExpire = datetime.datetime.now() + cache_duration
