@@ -1,5 +1,6 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from unittest import TestCase
+from unittest.mock import MagicMock, patch
 
 from app import chasecenter
 
@@ -67,6 +68,10 @@ class TestGetRawEvents(TestCase):
 
 
 class TestGetEvents(TestCase):
+    def setUp(self) -> None:
+        chasecenter.CachedEvents = []
+        chasecenter.CachedEventsExpire = datetime.now()
+
     def test_get_events(self) -> None:
         events = chasecenter.get_events()
         self.assertTrue(len(events) > 0)
@@ -78,3 +83,24 @@ class TestGetEvents(TestCase):
         self.assertTrue(isinstance(event.ticket_available, bool))
         self.assertTrue(isinstance(event.ticket_sold_out, bool))
         self.assertTrue(isinstance(event.duration, int))
+
+    @patch('app.chasecenter.get_raw_events')
+    def test_get_cached_events(self, mock_get_raw_events: MagicMock) -> None:
+        event = chasecenter.Event(EXAMPLE_RAW_EVENT)
+        chasecenter.CachedEvents = [event]
+        chasecenter.CachedEventsExpire += timedelta(days=1)
+        events = chasecenter.get_events()
+        self.assertEqual(events, [event])
+        self.assertEqual(chasecenter.CachedEvents, [event])
+        self.assertFalse(mock_get_raw_events.called)
+
+    @patch('app.chasecenter.get_raw_events')
+    def test_caches_events(self, mock_get_raw_events: MagicMock) -> None:
+        mock_get_raw_events.return_value = \
+            {'data': {'contentByType': {'items': [EXAMPLE_RAW_EVENT]}}}
+        events_1 = chasecenter.get_events()
+        self.assertTrue(mock_get_raw_events.called)
+        mock_get_raw_events.reset_mock()
+        events_2 = chasecenter.get_events()
+        self.assertFalse(mock_get_raw_events.called)
+        self.assertEqual(events_1, events_2)
