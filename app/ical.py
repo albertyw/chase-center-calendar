@@ -12,6 +12,14 @@ from app import chasecenter
 def generate_calendar(events: List[chasecenter.Event]) -> str:
     cal = Calendar()
     cal['summary'] = 'Chase Center Events'
+    cal['version'] = '2.0'
+    cal['prodid'] = '-//Albertyw.com//Chase Center Calendar//EN'
+    cal['x-wr-calname'] = 'Chase Center Events'
+    cal['x-wr-caldesc'] = 'Events at the SF Chase Center'
+    cal['timezone'] = 'America/Los_Angeles'
+    cal['x-wr-timezone'] = 'America/Los_Angeles'
+    cal['x-published-ttl'] = 'PT1H'
+    cal['refresh-interval'] = 'VALUE=DURATION:PT1H'
     for event in events:
         cal_event = generate_calendar_event(event)
         cal.add_component(cal_event)
