@@ -18,3 +18,7 @@ img {
     padding-top: 50px;
     height: 150px;
 }
+
+#logos img {
+    width: 25%;
+}
