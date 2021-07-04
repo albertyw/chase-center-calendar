@@ -11,7 +11,7 @@
       {% for event in events %}
         <div id="event">
           <h2>{{ event.title }}</h1>
-          <h3>{{ event.date }}</h2>
+          <h3>{{ event.date.strftime('%A %Y-%m-%d') }} {{ event.date.strftime('%I:%M %p') }} - {{ event.end.strftime('%I:%M %p') }}</h2>
           Subtitle: {{ event.subtitle }}<br />
           Location Name: {{ event.location_name }}<br />
           Location Type: {{ event.location_type }}<br />
