@@ -52,6 +52,13 @@ class TestEvent(TestCase):
         event.hide_road_game = True
         self.assertFalse(event.show)
 
+    def test_is_future(self) -> None:
+        event = chasecenter.Event(EXAMPLE_RAW_EVENT)
+        event.date = datetime(3000, 1, 1, tzinfo=chasecenter.TIMEZONE)
+        self.assertTrue(event.is_future)
+        event.date = datetime(1000, 1, 1, tzinfo=chasecenter.TIMEZONE)
+        self.assertFalse(event.is_future)
+
     def test_end(self) -> None:
         event = chasecenter.Event(EXAMPLE_RAW_EVENT)
         expected = chasecenter.TIMEZONE.localize(datetime(2020, 9, 15, 22, 30))
