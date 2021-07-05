@@ -12,12 +12,20 @@
         <div id="event">
           <h2>{{ event.title }}</h1>
           <h3>{{ event.date.strftime('%A %Y-%m-%d') }} {{ event.date.strftime('%I:%M %p') }} - {{ event.end.strftime('%I:%M %p') }}</h2>
-          Subtitle: {{ event.subtitle }}<br />
+          {% if event.subtitle %}
+            Subtitle: {{ event.subtitle }}<br />
+          {% endif %}
           Location Name: {{ event.location_name }}<br />
           Location Type: {{ event.location_type }}<br />
-          Ticket Required: {{ event.ticket_required }}<br />
-          Ticket Available: {{ event.ticket_available }}<br />
-          Ticket Sold Out: {{ event.ticket_sold_out }}<br />
+          {% if event.ticket_required %}
+            Tickets Required<br />
+          {% endif %}
+          {% if event.ticket_available %}
+            Tickets Available<br />
+          {% endif %}
+          {% if event.ticket_sold_out %}
+            Tickets Sold Out<br />
+          {% endif %}
         </div>
       {% endfor %}
     </div>
