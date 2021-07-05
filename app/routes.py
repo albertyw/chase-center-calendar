@@ -11,7 +11,7 @@ handlers = Blueprint('handlers', __name__)
 @handlers.route("/")
 def index() -> Any:
     events = chasecenter.get_events()
-    events = [e for e in events if e.show]
+    events = [e for e in events if e.show and e.is_future]
     return render_template("index.htm", events=events)
 
 

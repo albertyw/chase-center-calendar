@@ -44,11 +44,7 @@ class TestEvent(TestCase):
 
     def test_show(self) -> None:
         event = chasecenter.Event(EXAMPLE_RAW_EVENT)
-        event.date = datetime(3000, 1, 1, tzinfo=chasecenter.TIMEZONE)
         self.assertTrue(event.show)
-        event.date = datetime(1000, 1, 1, tzinfo=chasecenter.TIMEZONE)
-        self.assertFalse(event.show)
-        event.date = datetime(3000, 1, 1, tzinfo=chasecenter.TIMEZONE)
         event.hide_road_game = True
         self.assertFalse(event.show)
 

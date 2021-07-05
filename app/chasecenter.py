@@ -62,8 +62,6 @@ class Event():
     def show(self) -> bool:
         if self.hide_road_game:
             return False
-        if not self.is_future:
-            return False
         return True
 
     @property  # type: ignore
