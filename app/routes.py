@@ -18,6 +18,7 @@ def index() -> Any:
 @handlers.route("/ical_view")
 def ical_view() -> Any:
     events = chasecenter.get_events()
+    events = [e for e in events if e.show]
     cal = ical.generate_calendar(events)
     return render_template("ical_view.htm", cal=cal)
 
