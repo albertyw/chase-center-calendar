@@ -62,10 +62,13 @@ class Event():
     def show(self) -> bool:
         if self.hide_road_game:
             return False
-        cutoff = datetime.datetime.now(TIMEZONE) - datetime.timedelta(days=1)
-        if self.date < cutoff:
-            return False
         return True
+
+    @property  # type: ignore
+    @varsnap
+    def is_future(self) -> bool:
+        cutoff = datetime.datetime.now(TIMEZONE) - datetime.timedelta(days=1)
+        return self.date > cutoff
 
     @property  # type: ignore
     @varsnap
