@@ -5,7 +5,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="{{ url_for('static', filename='gen/bundle.min.css') }}" />
-    <meta name="Description" content="{% block description %}{% endblock %}">
+    <meta name="description" content="Track events at the San Francisco Chase Center">
+
+    <!-- Facebook Meta Tags -->
+    <meta property="og:url" content="https://www.chasecentercalendar.com/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Chase Center Calendar">
+    <meta property="og:description" content="Track events at the San Francisco Chase Center">
+    <meta property="og:image" content="https://www.chasecentercalendar.com/static/img/favicon/android-chrome-512x512.png">
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary">
+    <meta property="twitter:domain" content="chasecentercalendar.com">
+    <meta property="twitter:url" content="https://www.chasecentercalendar.com/">
+    <meta name="twitter:title" content="Chase Center Calendar">
+    <meta name="twitter:description" content="Track events at the San Francisco Chase Center">
+    <meta name="twitter:image" content="https://www.chasecentercalendar.com/static/img/favicon/android-chrome-512x512.png">
+
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/favicon/apple-touch-icon.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon/favicon-16x16.png') }}">
