@@ -3,6 +3,6 @@ coverage==5.5                    # Test coverage
 flake8==3.9.2                    # Python linting
 
 # Types
-mypy==0.902                      # Type checking
+mypy==0.910                      # Type checking
 types-pytz==0.1.0                # Type stubs for pytz package
 types-requests==0.1.10           # Type stubs for requests package
