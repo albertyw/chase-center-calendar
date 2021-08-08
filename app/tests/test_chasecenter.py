@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import json
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
@@ -64,10 +65,19 @@ class TestEvent(TestCase):
 class TestGetRawEvents(TestCase):
     def test_get_events(self) -> None:
         events = chasecenter.get_raw_events()
-        self.assertIn('data', events)
-        self.assertIn('contentByType', events['data'])
-        self.assertIn('items', events['data']['contentByType'])
-        self.assertTrue(len(events['data']['contentByType']['items']) > 0)
+        self.assertTrue(len(events) > 0)
+
+    @patch('requests.post')
+    def test_get_events_no_json(self, mock_post: MagicMock) -> None:
+        mock_post.json.side_effect = json.JSONDecodeError
+        events = chasecenter.get_raw_events()
+        self.assertEqual(len(events), 0)
+
+    @patch('requests.post')
+    def test_get_events_corrupt_json(self, mock_post: MagicMock) -> None:
+        mock_post.json.return_value = {'asdf': 'qwer'}
+        events = chasecenter.get_raw_events()
+        self.assertEqual(len(events), 0)
 
 
 class TestGetEvents(TestCase):
@@ -99,8 +109,7 @@ class TestGetEvents(TestCase):
 
     @patch('app.chasecenter.get_raw_events')
     def test_caches_events(self, mock_get_raw_events: MagicMock) -> None:
-        mock_get_raw_events.return_value = \
-            {'data': {'contentByType': {'items': [EXAMPLE_RAW_EVENT]}}}
+        mock_get_raw_events.return_value = [EXAMPLE_RAW_EVENT]
         events_1 = chasecenter.get_events()
         self.assertTrue(mock_get_raw_events.called)
         mock_get_raw_events.reset_mock()
