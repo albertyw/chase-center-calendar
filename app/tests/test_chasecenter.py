@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import json
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
@@ -65,6 +66,18 @@ class TestGetRawEvents(TestCase):
     def test_get_events(self) -> None:
         events = chasecenter.get_raw_events()
         self.assertTrue(len(events) > 0)
+
+    @patch('requests.post')
+    def test_get_events_no_json(self, mock_post: MagicMock) -> None:
+        mock_post.json.side_effect = json.JSONDecodeError
+        events = chasecenter.get_raw_events()
+        self.assertEqual(len(events), 0)
+
+    @patch('requests.post')
+    def test_get_events_corrupt_json(self, mock_post: MagicMock) -> None:
+        mock_post.json.return_value = {'asdf': 'qwer'}
+        events = chasecenter.get_raw_events()
+        self.assertEqual(len(events), 0)
 
 
 class TestGetEvents(TestCase):

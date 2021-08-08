@@ -1,4 +1,5 @@
 import datetime
+import json
 import random
 from typing import List, Mapping, Optional, Union, cast
 
@@ -82,8 +83,11 @@ def get_raw_events() -> RawQueryResponse:
         'query': QUERY,
     }
     response = requests.post(URL, data=data)
-    raw_response = response.json()
-    raw_query_response = raw_response['data']['contentByType']['items']
+    try:
+        raw_response = response.json()
+        raw_query_response = raw_response['data']['contentByType']['items']
+    except (json.JSONDecodeError, KeyError):
+        return []
     return cast(RawQueryResponse, raw_query_response)
 
 
