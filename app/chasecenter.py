@@ -5,6 +5,7 @@ from typing import List, Mapping, Optional, Union, cast
 
 import pytz
 import requests
+import rollbar
 from varsnap import varsnap
 
 
@@ -85,8 +86,13 @@ def get_raw_events() -> RawQueryResponse:
     response = requests.post(URL, data=data)
     try:
         raw_response = response.json()
+    except json.JSONDecodeError:
+        rollbar.report_message('Cannot parse chasecenter json', 'warning')
+        return []
+    try:
         raw_query_response = raw_response['data']['contentByType']['items']
-    except (json.JSONDecodeError, KeyError):
+    except KeyError:
+        rollbar.report_message('Received corrupt chasecenter json', 'warning')
         return []
     return cast(RawQueryResponse, raw_query_response)
 
