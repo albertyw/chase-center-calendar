@@ -9,7 +9,8 @@ from varsnap import varsnap
 
 FieldValues = Union[None, str, bool, int]
 RawEvent = Mapping[str, Mapping[str, FieldValues]]
-RawQueryResponse = Mapping[str, Mapping[str, Mapping[str, List[RawEvent]]]]
+# RawQueryResponse = Mapping[str, Mapping[str, Mapping[str, List[RawEvent]]]]
+RawQueryResponse = List[RawEvent]
 
 URL = "https://content-api-dot-chasecenter-com.appspot.com/graphql"
 QUERY = """
@@ -81,7 +82,9 @@ def get_raw_events() -> RawQueryResponse:
         'query': QUERY,
     }
     response = requests.post(URL, data=data)
-    return cast(RawQueryResponse, response.json())
+    raw_response = response.json()
+    raw_query_response = raw_response['data']['contentByType']['items']
+    return cast(RawQueryResponse, raw_query_response)
 
 
 CachedEvents: List[Event] = []
@@ -92,8 +95,7 @@ def get_events() -> List[Event]:
     global CachedEvents, CachedEventsExpire
     if CachedEvents and CachedEventsExpire > datetime.datetime.now():
         return CachedEvents
-    raw_data = get_raw_events()
-    raw_events = raw_data['data']['contentByType']['items']
+    raw_events = get_raw_events()
     events = [Event(e) for e in raw_events]
     events = sorted(events, key=lambda e: e.date)
     _refresh_cache(events)
