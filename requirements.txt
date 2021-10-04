@@ -7,9 +7,9 @@ syspath==2.0.5         # Modify paths
 # Features
 flask-sitemap==0.3.0   # Web sitemaps
 icalendar==4.0.7       # iCal generator
-pytz==2021.1           # Timezone support
+pytz==2021.3           # Timezone support
 
 # Monitoring/tracking/logging
 blinker==1.4           # Dependency of rollbar
-rollbar==0.16.1        # rollbar.com error logging
+rollbar==0.16.2        # rollbar.com error logging
 varsnap==1.4.4         # Test discovery
