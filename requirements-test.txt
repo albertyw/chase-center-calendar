@@ -5,4 +5,4 @@ flake8==3.9.2                    # Python linting
 # Types
 mypy==0.910                      # Type checking
 types-pytz==2021.1.2             # Type stubs for pytz package
-types-requests==2.25.6           # Type stubs for requests package
+types-requests==2.25.9           # Type stubs for requests package
