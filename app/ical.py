@@ -5,11 +5,11 @@ from icalendar import Calendar, Event
 import pytz
 from varsnap import varsnap
 
-from app import chasecenter
+from app import event
 
 
 @varsnap
-def generate_calendar(events: List[chasecenter.Event]) -> str:
+def generate_calendar(events: List[event.Event]) -> str:
     cal = Calendar()
     cal['summary'] = 'Chase Center Events'
     cal['version'] = '2.0'
@@ -20,14 +20,14 @@ def generate_calendar(events: List[chasecenter.Event]) -> str:
     cal['x-wr-timezone'] = 'America/Los_Angeles'
     cal['x-published-ttl'] = 'PT1H'
     cal['refresh-interval'] = 'VALUE=DURATION:PT1H'
-    for event in events:
-        cal_event = generate_calendar_event(event)
+    for e in events:
+        cal_event = generate_calendar_event(e)
         cal.add_component(cal_event)
     return str(cal.to_ical().decode('utf-8'))
 
 
 @varsnap
-def generate_calendar_event(event: chasecenter.Event) -> Event:
+def generate_calendar_event(event: event.Event) -> Event:
     cal_event = Event()
     cal_event['uid'] = event.id
     cal_event['dtstart'] = date_string(event.date)
