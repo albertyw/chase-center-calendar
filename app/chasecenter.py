@@ -43,22 +43,41 @@ TIMEZONE = pytz.timezone('America/Los_Angeles')
 
 
 class Event():
-    def __init__(self, event_data: RawEvent) -> None:
+    def __init__(self) -> None:
+        self.id: Optional[str] = None
+        self.slug: Optional[str] = None
+        self.title: str = ''
+        self.subtitle: Optional[str] = None
+        self.date_string: str = ''
+        now = datetime.datetime.now()
+        self.date: datetime.datetime = TIMEZONE.localize(now)
+        self.location_name: Optional[str] = None
+        self.location_type: Optional[str] = None
+        self.ticket_required: bool = False
+        self.ticket_available: bool = False
+        self.ticket_sold_out: bool = False
+        self.hide_road_game: bool = False
+        self.duration: int = 60
+
+    @staticmethod
+    def initialize_chase(event_data: RawEvent) -> 'Event':
+        event = Event()
         data = event_data['fields']
-        self.id = cast(Optional[str], data['id'])
-        self.slug = cast(Optional[str], data['slug'])
-        self.title = cast(str, data['title'])
-        self.subtitle = cast(Optional[str], data['subtitle'])
-        self.date_string = cast(str, data['date'])
-        self.date = datetime.datetime.fromisoformat(self.date_string)
-        self.date = TIMEZONE.localize(self.date)
-        self.location_name = cast(Optional[str], data['locationName'])
-        self.location_type = cast(Optional[str], data['locationType'])
-        self.ticket_required = cast(bool, data['ticketRequired'])
-        self.ticket_available = cast(bool, data['ticketAvailable'])
-        self.ticket_sold_out = cast(bool, data['ticketSoldOut'])
-        self.hide_road_game = data['hideRoadGame'] == 'yes'
-        self.duration = cast(int, data['duration'])
+        event.id = cast(Optional[str], data['id'])
+        event.slug = cast(Optional[str], data['slug'])
+        event.title = cast(str, data['title'])
+        event.subtitle = cast(Optional[str], data['subtitle'])
+        event.date_string = cast(str, data['date'])
+        date = datetime.datetime.fromisoformat(event.date_string)
+        event.date = TIMEZONE.localize(date)
+        event.location_name = cast(Optional[str], data['locationName'])
+        event.location_type = cast(Optional[str], data['locationType'])
+        event.ticket_required = cast(bool, data['ticketRequired'])
+        event.ticket_available = cast(bool, data['ticketAvailable'])
+        event.ticket_sold_out = cast(bool, data['ticketSoldOut'])
+        event.hide_road_game = data['hideRoadGame'] == 'yes'
+        event.duration = cast(int, data['duration'])
+        return event
 
     @property  # type: ignore
     @varsnap
@@ -106,7 +125,7 @@ def get_events() -> List[Event]:
     if CachedEvents and CachedEventsExpire > datetime.datetime.now():
         return CachedEvents
     raw_events = get_raw_events()
-    events = [Event(e) for e in raw_events]
+    events = [Event.initialize_chase(e) for e in raw_events]
     events = sorted(events, key=lambda e: e.date)
     _refresh_cache(events)
     return events

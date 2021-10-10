@@ -26,7 +26,7 @@ EXAMPLE_RAW_EVENT = {
 
 class TestEvent(TestCase):
     def test_init(self) -> None:
-        event = chasecenter.Event(EXAMPLE_RAW_EVENT)
+        event = chasecenter.Event.initialize_chase(EXAMPLE_RAW_EVENT)
         data = EXAMPLE_RAW_EVENT['fields']
         self.assertEqual(event.id, data['id'])
         self.assertEqual(event.slug, data['slug'])
@@ -44,20 +44,20 @@ class TestEvent(TestCase):
         self.assertEqual(event.duration, data['duration'])
 
     def test_show(self) -> None:
-        event = chasecenter.Event(EXAMPLE_RAW_EVENT)
+        event = chasecenter.Event.initialize_chase(EXAMPLE_RAW_EVENT)
         self.assertTrue(event.show)
         event.hide_road_game = True
         self.assertFalse(event.show)
 
     def test_is_future(self) -> None:
-        event = chasecenter.Event(EXAMPLE_RAW_EVENT)
+        event = chasecenter.Event.initialize_chase(EXAMPLE_RAW_EVENT)
         event.date = datetime(3000, 1, 1, tzinfo=chasecenter.TIMEZONE)
         self.assertTrue(event.is_future)
         event.date = datetime(1000, 1, 1, tzinfo=chasecenter.TIMEZONE)
         self.assertFalse(event.is_future)
 
     def test_end(self) -> None:
-        event = chasecenter.Event(EXAMPLE_RAW_EVENT)
+        event = chasecenter.Event.initialize_chase(EXAMPLE_RAW_EVENT)
         expected = chasecenter.TIMEZONE.localize(datetime(2020, 9, 15, 22, 30))
         self.assertEqual(event.end, expected)
 
@@ -99,7 +99,7 @@ class TestGetEvents(TestCase):
 
     @patch('app.chasecenter.get_raw_events')
     def test_get_cached_events(self, mock_get_raw_events: MagicMock) -> None:
-        event = chasecenter.Event(EXAMPLE_RAW_EVENT)
+        event = chasecenter.Event.initialize_chase(EXAMPLE_RAW_EVENT)
         chasecenter.CachedEvents = [event]
         chasecenter.CachedEventsExpire += timedelta(days=1)
         events = chasecenter.get_events()

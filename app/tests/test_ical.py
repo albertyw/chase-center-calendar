@@ -7,7 +7,7 @@ from app import chasecenter, ical
 from app.tests.test_chasecenter import EXAMPLE_RAW_EVENT
 
 
-EXAMPLE_EVENT = chasecenter.Event(EXAMPLE_RAW_EVENT)
+EXAMPLE_EVENT = chasecenter.Event.initialize_chase(EXAMPLE_RAW_EVENT)
 
 
 class TestGenerateCalendar(TestCase):
