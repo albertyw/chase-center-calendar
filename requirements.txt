@@ -5,6 +5,7 @@ uWSGI==2.0.20          # Application server
 syspath==2.0.5         # Modify paths
 
 # Features
+beautifulsoup4==4.10.0 # HTML Parser
 flask-sitemap==0.3.0   # Web sitemaps
 icalendar==4.0.8       # iCal generator
 pytz==2021.3           # Timezone support
