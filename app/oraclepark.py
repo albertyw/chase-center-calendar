@@ -3,6 +3,7 @@ from typing import List
 from bs4 import BeautifulSoup
 from dateutil import parser as dateutilparser
 import requests
+from slugify import slugify
 
 from app.event import Event, TIMEZONE
 
@@ -24,8 +25,8 @@ def parse_event_div(event_div: BeautifulSoup) -> Event:
         'span',
         class_='ds-listing-event-title-text',
     )[0].get_text()
-    event.slug = event.title
-    event.subtitle = event.title
+    event.slug = slugify(event.title)
+    event.subtitle = ''
     event.date_string = event_div.find_all(
         'meta',
         attrs={'itemprop': 'startDate'},
