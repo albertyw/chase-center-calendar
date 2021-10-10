@@ -1,5 +1,4 @@
-import datetime
-from typing import cast, List, Optional
+from typing import List
 
 from bs4 import BeautifulSoup
 from dateutil import parser as dateutilparser
@@ -20,16 +19,25 @@ def get_raw_events() -> List[BeautifulSoup]:
 
 def parse_event_div(event_div: BeautifulSoup) -> Event:
     event = Event()
-    event.id = cast(Optional[str], event_div.find_all('a', class_='ds-btn-ical')[0]['data-ds-id'])
-    event.title = cast(str, event_div.find_all('span', attrs={'itemprop': 'name'})[0].get_text())
-    event.slug = cast(Optional[str], event.title)
-    event.subtitle = cast(Optional[str], event.title)
-    event.date_string = cast(str, event_div.find_all('meta', attrs={'itemprop': 'startDate'})[0]['datetime'])
+    event.id = event_div.find_all('a', class_='ds-btn-ical')[0]['data-ds-id']
+    event.title = event_div.find_all(
+        'span',
+        class_='ds-listing-event-title-text',
+    )[0].get_text()
+    event.slug = event.title
+    event.subtitle = event.title
+    event.date_string = event_div.find_all(
+        'meta',
+        attrs={'itemprop': 'startDate'},
+    )[0]['datetime']
     date = dateutilparser.isoparse(event.date_string)
     event.date = date.astimezone(TIMEZONE)
     event.date_string = event.date.isoformat()
     location = event_div.find_all('div', attrs={'itemprop': 'location'})[0]
-    event.location_name = cast(Optional[str], location.find_all('span', attrs={'itemprop': 'name'})[0].get_text())
+    event.location_name = location.find_all(
+        'span',
+        attrs={'itemprop': 'name'},
+    )[0].get_text()
     event.location_type = ''
     event.ticket_required = True
     event.ticket_available = True
@@ -45,7 +53,6 @@ def get_events() -> List[Event]:
     for event_div in event_divs:
         event = parse_event_div(event_div)
         events.append(event)
-    print(events[0].__dict__)
     return events
 
 
