@@ -27,11 +27,11 @@ def parse_event_div(event_div: BeautifulSoup) -> Event:
     )[0].get_text()
     event.slug = slugify(event.title)
     event.subtitle = ''
-    event.date_string = event_div.find_all(
+    date_string = event_div.find_all(
         'meta',
         attrs={'itemprop': 'startDate'},
     )[0]['datetime']
-    date = dateutilparser.isoparse(event.date_string)
+    date = dateutilparser.isoparse(date_string)
     event.date = date.astimezone(TIMEZONE)
     event.date_string = event.date.isoformat()
     location = event_div.find_all('div', attrs={'itemprop': 'location'})[0]
