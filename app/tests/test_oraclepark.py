@@ -109,6 +109,10 @@ class TestParseEventDiv(unittest.TestCase):
 class TestGetEvents(unittest.TestCase):
     def test_get(self) -> None:
         events = oraclepark.get_events()
-        self.assertGreater(len(events), 0)
+        self.assertGreater(len(events), 1)
         ids = [e.id for e in events]
         self.assertEqual(len(ids), len(set(ids)))
+
+        oraclepark.CachedEvents = [oraclepark.CachedEvents[0]]
+        events = oraclepark.get_events()
+        self.assertEqual(events, oraclepark.CachedEvents)

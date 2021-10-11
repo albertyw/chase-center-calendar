@@ -1,3 +1,5 @@
+import datetime
+import random
 from typing import List
 
 from bs4 import BeautifulSoup
@@ -48,14 +50,25 @@ def parse_event_div(event_div: BeautifulSoup) -> Event:
     return event
 
 
+CachedEvents: List[Event] = []
+CachedEventsExpire = datetime.datetime.now()
+
+
 def get_events() -> List[Event]:
+    global CachedEvents, CachedEventsExpire
+    if CachedEvents and CachedEventsExpire > datetime.datetime.now():
+        return CachedEvents
     event_divs = get_raw_events()
     events: List[Event] = []
     for event_div in event_divs:
         event = parse_event_div(event_div)
         events.append(event)
+    _refresh_cache(events)
     return events
 
 
-if __name__ == '__main__':
-    get_events()
+def _refresh_cache(events: List[Event]) -> None:
+    global CachedEvents, CachedEventsExpire
+    CachedEvents = events
+    cache_duration = datetime.timedelta(minutes=random.randint(30, 90))
+    CachedEventsExpire = datetime.datetime.now() + cache_duration
