@@ -31,3 +31,10 @@ GraphQL API for chase-center-calendar:
   }
 }
 ```
+
+Oracle Park API Documentation
+=============================
+
+Oracle Park's official website does not contain an up-to-date comprehensive list of events.
+Therefore, this site uses dothebay.com's data which does seem more complete.  This site
+therefore parses its Oracle Park events from https://dothebay.com/venues/oracle-park/events.
