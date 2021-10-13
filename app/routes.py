@@ -40,6 +40,16 @@ def oracle_park() -> Any:
     return render_template("oracle_park.htm", events=events)
 
 
+@handlers.route("/oraclepark.ics")
+def oracle_park_ics_file() -> Any:
+    events = oraclepark.get_events()
+    cal = ical.generate_calendar(events)
+    response = make_response(cal)
+    response.headers["Content-Disposition"] = \
+        "attachment; filename=oraclepark.ics"
+    return response
+
+
 @handlers.route("/about")
 @varsnap
 def about() -> Any:
