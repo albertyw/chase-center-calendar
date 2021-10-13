@@ -16,7 +16,9 @@
             Subtitle: {{ event.subtitle }}<br />
           {% endif %}
           Location Name: {{ event.location_name }}<br />
-          Location Type: {{ event.location_type }}<br />
+          {% if event.location_type %}
+            Location Type: {{ event.location_type }}<br />
+          {% endif %}
           {% if event.ticket_required %}
             Tickets Required<br />
           {% endif %}
