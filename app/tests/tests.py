@@ -11,7 +11,7 @@ class PageCase(unittest.TestCase):
         self.app = serve.app.test_client()
 
     def test_index_load(self) -> None:
-        self.page_test('/', b'')
+        self.page_test('/', b'Chase Center Calendar')
 
     def test_robots_load(self) -> None:
         self.page_test('/robots.txt', b'')
@@ -28,19 +28,13 @@ class PageCase(unittest.TestCase):
         self.assertIn(b'Not Found', response.get_data())
 
     def test_about(self) -> None:
-        response = self.app.get('/about')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Chase Center Calendar', response.get_data())
+        self.page_test('/about', b'Chase Center Calendar')
 
     def test_ical_file(self) -> None:
-        response = self.app.get('/chasecenter.ics')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(b'BEGIN:VCALENDAR', response.get_data())
+        self.page_test('/chasecenter.ics', b'BEGIN:VCALENDAR')
 
     def test_ical_view(self) -> None:
-        response = self.app.get('/ical_view')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(b'BEGIN:VCALENDAR', response.get_data())
+        self.page_test('/ical_view', b'BEGIN:VCALENDAR')
 
     def page_test(self, path: str, string: bytes) -> None:
         response = self.app.get(path)
