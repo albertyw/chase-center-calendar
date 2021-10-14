@@ -3,7 +3,7 @@ from typing import Any
 from flask import Blueprint, make_response, render_template
 from varsnap import varsnap
 
-from app import chasecenter, ical
+from app import chasecenter, ical, oraclepark
 
 handlers = Blueprint('handlers', __name__)
 
@@ -30,6 +30,23 @@ def ical_file() -> Any:
     response = make_response(cal)
     response.headers["Content-Disposition"] = \
         "attachment; filename=chasecenter.ics"
+    return response
+
+
+@handlers.route("/oracle_park")
+def oracle_park() -> Any:
+    events = oraclepark.get_events()
+    events = [e for e in events if e.show and e.is_future]
+    return render_template("oracle_park.htm", events=events)
+
+
+@handlers.route("/oraclepark.ics")
+def oracle_park_ics_file() -> Any:
+    events = oraclepark.get_events()
+    cal = ical.generate_calendar(events)
+    response = make_response(cal)
+    response.headers["Content-Disposition"] = \
+        "attachment; filename=oraclepark.ics"
     return response
 
 

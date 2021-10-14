@@ -36,6 +36,12 @@ class PageCase(unittest.TestCase):
     def test_ical_view(self) -> None:
         self.page_test('/ical_view', b'BEGIN:VCALENDAR')
 
+    def test_oracle_park(self) -> None:
+        self.page_test('/oracle_park', b'Oracle Park Calendar')
+
+    def test_oracle_park_ical_file(self) -> None:
+        self.page_test('/oraclepark.ics', b'BEGIN:VCALENDAR')
+
     def page_test(self, path: str, string: bytes) -> None:
         response = self.app.get(path)
         self.assertEqual(response.status_code, 200)
