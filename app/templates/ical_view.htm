@@ -5,20 +5,29 @@
 {% endblock %}
 {% block content %}
   <div>
-    <h1>Chase Center Calendar iCal</h1>
+    <h1>iCalendar</h1>
     <div id="info">
       <p>
-        This is the iCal data that can be loaded into Google Calendar, Apple Calendar, etc.
+        The calendar is available in the iCal format so it can be loaded into Google Calendar, Apple Calendar, etc.
       </p>
+      <h2>Chase Center</h2>
       <p>
-        Import this URL into your calendaring app:
+        Import this URL into your calendar app for Chase Center events:
         <pre>{{ url_for('handlers.ical_file', _external=True) }}</pre>
       </p>
       <p>
-        Alternatively, you can download the calendar but you will not be able to automatically synchronize updates:
-        <a href="{{ url_for('handlers.ical_file') }}">Download Non-Synchronized Calendar</a>
+        Alternatively, you can download the calendar but you will not be able to automatically synchronize updates:<br />
+        <a href="{{ url_for('handlers.ical_file') }}">Download Chase Center Non-Synchronized Calendar</a>
       </p>
-      <pre>{{ cal }}</pre>
+      <h2>Oracle Park</h2>
+      <p>
+        Import this URL into your calendar app for Oracle Park events:
+        <pre>{{ url_for('handlers.oracle_park_ics_file', _external=True) }}</pre>
+      </p>
+      <p>
+        Alternatively, you can download the calendar but you will not be able to automatically synchronize updates:<br />
+        <a href="{{ url_for('handlers.oracle_park_ics_file') }}">Download Oracle Park Non-Synchronized Calendar</a>
+      </p>
     </div>
   </div>
 {% endblock %}

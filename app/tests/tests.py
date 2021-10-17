@@ -34,7 +34,7 @@ class PageCase(unittest.TestCase):
         self.page_test('/chasecenter.ics', b'BEGIN:VCALENDAR')
 
     def test_ical_view(self) -> None:
-        self.page_test('/ical_view', b'BEGIN:VCALENDAR')
+        self.page_test('/ical_view', b'.ics')
 
     def test_oracle_park(self) -> None:
         self.page_test('/oracle_park', b'Oracle Park Calendar')
