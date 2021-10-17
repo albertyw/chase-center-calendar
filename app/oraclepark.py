@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 from dateutil import parser as dateutilparser
 import requests
 from slugify import slugify
+from varsnap import varsnap
 
 from app.event import Event, TIMEZONE
 
@@ -20,6 +21,7 @@ def get_raw_events() -> List[BeautifulSoup]:
     return event_divs
 
 
+@varsnap
 def parse_event_div(event_div: BeautifulSoup) -> Event:
     event = Event()
     event.id = event_div.find_all('a', class_='ds-btn-ical')[0]['data-ds-id']

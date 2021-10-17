@@ -5,6 +5,7 @@ from typing import List, Mapping, Optional, Union, cast
 
 import requests
 import rollbar
+from varsnap import varsnap
 
 from app.event import Event, TIMEZONE
 
@@ -41,7 +42,8 @@ QUERY = """
 """
 
 
-def initialize_chase_event(event_data: RawEvent) -> 'Event':
+@varsnap
+def initialize_chase_event(event_data: RawEvent) -> Event:
     event = Event()
     data = event_data['fields']
     event.id = cast(Optional[str], data['id'])
