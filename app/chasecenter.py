@@ -88,7 +88,7 @@ def get_events() -> List[Event]:
     if CachedEvents and CachedEventsExpire > datetime.datetime.now():
         return CachedEvents
     raw_events = get_raw_events()
-    events = [initialize_chase_event(e) for e in raw_events]
+    events: List[Event] = [initialize_chase_event(e) for e in raw_events]
     events = sorted(events, key=lambda e: e.date)
     _refresh_cache(events)
     return events
