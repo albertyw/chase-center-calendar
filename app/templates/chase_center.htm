@@ -1,0 +1,34 @@
+{% extends "includes/base.htm" %}
+{% block title %}Chase Center Calendar - Chase Center{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <div>
+    <h1>Chase Center Calendar</h1>
+    <div id="events">
+      {% for event in events %}
+        <div id="event">
+          <h2>{{ event.title }}</h1>
+          <h3>{{ event.date.strftime('%A %Y-%m-%d') }} {{ event.date.strftime('%I:%M %p') }} - {{ event.end.strftime('%I:%M %p') }}</h2>
+          {% if event.subtitle %}
+            Subtitle: {{ event.subtitle }}<br />
+          {% endif %}
+          Location Name: {{ event.location_name }}<br />
+          {% if event.location_type %}
+            Location Type: {{ event.location_type }}<br />
+          {% endif %}
+          {% if event.ticket_required %}
+            Tickets Required<br />
+          {% endif %}
+          {% if event.ticket_available %}
+            Tickets Available<br />
+          {% endif %}
+          {% if event.ticket_sold_out %}
+            Tickets Sold Out<br />
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
