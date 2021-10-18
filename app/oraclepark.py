@@ -27,7 +27,6 @@ def get_raw_events(url: str) -> List[BeautifulSoup]:
 @varsnap
 def parse_event_div(event_div: BeautifulSoup) -> Event:
     event = Event()
-    event.id = event_div.find_all('a', class_='ds-btn-ical')[0]['data-ds-id']
     event.title = event_div.find_all(
         'span',
         class_='ds-listing-event-title-text',
@@ -41,6 +40,11 @@ def parse_event_div(event_div: BeautifulSoup) -> Event:
     date = dateutilparser.isoparse(date_string)
     event.date = date.astimezone(TIMEZONE)
     event.date_string = event.date.isoformat()
+    try:
+        anchor = event_div.find_all('a', class_='ds-btn-ical')
+        event.id = anchor[0]['data-ds-id']
+    except IndexError:
+        event.id = event.slug + event.date_string
     location = event_div.find_all('div', attrs={'itemprop': 'location'})[0]
     event.location_name = location.find_all(
         'span',
