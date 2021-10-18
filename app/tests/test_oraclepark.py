@@ -70,7 +70,7 @@ SAMPLE_EVENT_DATA = """<div class="ds-events-group">
 
 class TestGetRawEvents(unittest.TestCase):
     def test_get(self) -> None:
-        event_divs = oraclepark.get_raw_events()
+        event_divs = oraclepark.get_raw_events(oraclepark.URLS[0])
         self.assertGreater(len(event_divs), 0)
         for event_div in event_divs:
             self.assertGreater(len(event_div), 0)

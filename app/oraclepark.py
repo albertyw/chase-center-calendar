@@ -11,11 +11,14 @@ from varsnap import varsnap
 from app.event import Event, TIMEZONE
 
 
-URL = "https://dothebay.com/venues/oracle-park/events"
+URLS = [
+    "https://dothebay.com/venues/oracle-park/events",
+    "https://dothebay.com/venues/oracle-park/past_events",
+]
 
 
-def get_raw_events() -> List[BeautifulSoup]:
-    response = requests.get(URL)
+def get_raw_events(url: str) -> List[BeautifulSoup]:
+    response = requests.get(url)
     soup = BeautifulSoup(response.content, 'html.parser')
     event_divs = soup.find_all('div', class_='ds-events-group')
     return event_divs
@@ -24,7 +27,6 @@ def get_raw_events() -> List[BeautifulSoup]:
 @varsnap
 def parse_event_div(event_div: BeautifulSoup) -> Event:
     event = Event()
-    event.id = event_div.find_all('a', class_='ds-btn-ical')[0]['data-ds-id']
     event.title = event_div.find_all(
         'span',
         class_='ds-listing-event-title-text',
@@ -38,6 +40,11 @@ def parse_event_div(event_div: BeautifulSoup) -> Event:
     date = dateutilparser.isoparse(date_string)
     event.date = date.astimezone(TIMEZONE)
     event.date_string = event.date.isoformat()
+    try:
+        anchor = event_div.find_all('a', class_='ds-btn-ical')
+        event.id = anchor[0]['data-ds-id']
+    except IndexError:
+        event.id = event.slug + event.date_string
     location = event_div.find_all('div', attrs={'itemprop': 'location'})[0]
     event.location_name = location.find_all(
         'span',
@@ -60,11 +67,12 @@ def get_events() -> List[Event]:
     global CachedEvents, CachedEventsExpire
     if CachedEvents and CachedEventsExpire > datetime.datetime.now():
         return CachedEvents
-    event_divs = get_raw_events()
     events: List[Event] = []
-    for event_div in event_divs:
-        event = parse_event_div(event_div)
-        events.append(event)
+    for url in URLS:
+        event_divs = get_raw_events(url)
+        for event_div in event_divs:
+            event = parse_event_div(event_div)
+            events.append(event)
     _refresh_cache(events)
     return events
 
