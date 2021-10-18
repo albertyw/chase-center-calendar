@@ -11,11 +11,14 @@ from varsnap import varsnap
 from app.event import Event, TIMEZONE
 
 
-URL = "https://dothebay.com/venues/oracle-park/events"
+URLS = [
+    "https://dothebay.com/venues/oracle-park/events",
+    "https://dothebay.com/venues/oracle-park/past_events",
+]
 
 
-def get_raw_events() -> List[BeautifulSoup]:
-    response = requests.get(URL)
+def get_raw_events(url: str) -> List[BeautifulSoup]:
+    response = requests.get(url)
     soup = BeautifulSoup(response.content, 'html.parser')
     event_divs = soup.find_all('div', class_='ds-events-group')
     return event_divs
@@ -60,11 +63,12 @@ def get_events() -> List[Event]:
     global CachedEvents, CachedEventsExpire
     if CachedEvents and CachedEventsExpire > datetime.datetime.now():
         return CachedEvents
-    event_divs = get_raw_events()
     events: List[Event] = []
-    for event_div in event_divs:
-        event = parse_event_div(event_div)
-        events.append(event)
+    for url in URLS:
+        event_divs = get_raw_events(url)
+        for event_div in event_divs:
+            event = parse_event_div(event_div)
+            events.append(event)
     _refresh_cache(events)
     return events
 
