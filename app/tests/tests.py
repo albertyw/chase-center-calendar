@@ -30,6 +30,9 @@ class PageCase(unittest.TestCase):
     def test_about(self) -> None:
         self.page_test('/about', b'Chase Center Calendar')
 
+    def test_chase_center(self) -> None:
+        self.page_test('/chase_center', b'Chase Center Calendar')
+
     def test_ical_file(self) -> None:
         self.page_test('/chasecenter.ics', b'BEGIN:VCALENDAR')
 
