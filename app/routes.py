@@ -20,6 +20,13 @@ def ical_view() -> Any:
     return render_template("ical_view.htm")
 
 
+@handlers.route("/chase_center")
+def chase_center() -> Any:
+    events = chasecenter.get_events()
+    events = [e for e in events if e.show and e.is_future]
+    return render_template("chase_center.htm", events=events)
+
+
 @handlers.route("/chasecenter.ics")
 def ical_file() -> Any:
     events = chasecenter.get_events()
