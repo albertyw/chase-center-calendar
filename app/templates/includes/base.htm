@@ -4,8 +4,10 @@
     {% block head %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="google-site-verification" content="" />
+    <link rel="alternate" href="{{ request.base_url }}" hreflang="en-us" />
     <link rel="stylesheet" href="{{ url_for('static', filename='gen/bundle.min.css') }}" />
-    <meta name="description" content="Track events at the San Francisco Chase Center">
+    <meta name="Description" content="Track events at the San Francisco Chase Center">
 
     <!-- Facebook Meta Tags -->
     <meta property="og:url" content="https://www.chasecentercalendar.com/">
@@ -22,6 +24,8 @@
     <meta name="twitter:description" content="Track events at the San Francisco Chase Center">
     <meta name="twitter:image" content="https://www.chasecentercalendar.com/static/img/favicon/android-chrome-512x512.png">
 
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/favicon/apple-touch-icon.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon/favicon-16x16.png') }}">
