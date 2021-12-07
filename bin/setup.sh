@@ -28,6 +28,7 @@ sudo cp "$HOME/chase-center-calendar/config/nginx/nginx.conf" "/etc/nginx/nginx.
 sudo cp "$HOME/chase-center-calendar/config/nginx/gzip.conf" "/etc/nginx/snippets/gzip.conf"
 sudo cp "$HOME/chase-center-calendar/config/nginx/headers.conf" "/etc/nginx/snippets/headers.conf"
 sudo cp "$HOME/chase-center-calendar/config/nginx/ssl.conf" "/etc/nginx/snippets/ssl.conf"
+sudo mkdir -p "/var/log/nginx/chase-center-calendar/"
 sudo rm -rf /var/www/html
 
 # Secure nginx
