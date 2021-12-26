@@ -28,9 +28,8 @@ steps:
       CC_TEST_REPORTER_ID: 2fd1548c4a64215b1a8790e4cf423b329dda550bcf437b5e5835c16fd0da332b
 
   - name: Test Node
-    image: node:16
+    image: satantime/puppeteer-node:16-bullseye-slim
     commands:
-      - apt-get update && apt-get install -y fonts-liberation libappindicator3-1 libasound2 libatk-bridge2.0-0 libcups2 libgbm1 libgtk-3-0 libnspr4 libnss3 libx11-xcb1 libxss1 libxtst6 lsb-release xdg-utils
       - ln -fs .env.development .env
       - npm ci
       - npm test
