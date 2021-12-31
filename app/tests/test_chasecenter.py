@@ -34,7 +34,7 @@ class TestEvent(TestCase):
         self.assertEqual(event.title, data['title'])
         self.assertEqual(event.subtitle, data['subtitle'])
         self.assertEqual(event.date_string, data['date'])
-        expected = TIMEZONE.localize(datetime(2020, 9, 15, 19, 30))
+        expected = datetime(2020, 9, 15, 19, 30).replace(tzinfo=TIMEZONE)
         self.assertEqual(event.date, expected)
         self.assertEqual(event.location_name, data['locationName'])
         self.assertEqual(event.location_type, data['locationType'])
@@ -59,7 +59,7 @@ class TestEvent(TestCase):
 
     def test_end(self) -> None:
         event = chasecenter.initialize_chase_event(EXAMPLE_RAW_EVENT)
-        expected = TIMEZONE.localize(datetime(2020, 9, 15, 22, 30))
+        expected = datetime(2020, 9, 15, 22, 30).replace(tzinfo=TIMEZONE)
         self.assertEqual(event.end, expected)
 
 

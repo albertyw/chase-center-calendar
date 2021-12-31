@@ -1,11 +1,11 @@
 import datetime
 from typing import Optional
+from zoneinfo import ZoneInfo
 
-import pytz
 from varsnap import varsnap
 
 
-TIMEZONE = pytz.timezone('America/Los_Angeles')
+TIMEZONE = ZoneInfo('America/Los_Angeles')
 
 
 class Event():
@@ -15,8 +15,7 @@ class Event():
         self.title: str = ''
         self.subtitle: Optional[str] = None
         self.date_string: str = ''
-        now = datetime.datetime.now()
-        self.date: datetime.datetime = TIMEZONE.localize(now)
+        self.date: datetime.datetime = datetime.datetime.now(tz=TIMEZONE)
         self.location_name: Optional[str] = None
         self.location_type: Optional[str] = None
         self.ticket_required: bool = False

@@ -2,7 +2,6 @@ import datetime
 from typing import List
 
 from icalendar import Calendar, Event
-import pytz
 from varsnap import varsnap
 
 from app import event
@@ -40,7 +39,7 @@ def generate_calendar_event(event: event.Event) -> Event:
 
 @varsnap
 def date_string(dt: datetime.datetime) -> str:
-    utc = dt.astimezone(pytz.utc).replace(tzinfo=None)
+    utc = dt.astimezone(datetime.timezone.utc).replace(tzinfo=None)
     formatted = utc.isoformat()
     formatted = formatted.replace('-', '')
     formatted = formatted.replace(':', '')
