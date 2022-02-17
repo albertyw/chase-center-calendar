@@ -1,13 +1,12 @@
 # Core packages
 python-dotenv==0.19.2  # Read environment variables from .env
-Flask==2.0.2           # Web microframework
+Flask==2.0.3           # Web microframework
 uWSGI==2.0.20          # Application server
 syspath==3.0.0         # Modify paths
 
 # Features
 beautifulsoup4==4.10.0 # HTML Parser
-git+git://github.com/albertyw/flask-sitemap@python-3-10#flask-sitemap
-# Web sitemaps
+flask-sitemap==0.4.0   # Web sitemaps
 icalendar==4.0.9       # iCal generator
 python-dateutil==2.8.2 # Datetime manipulation
 python-slugify==5.0.2  # Generate string slugs
