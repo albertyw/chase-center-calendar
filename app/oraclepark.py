@@ -68,11 +68,15 @@ def get_events() -> List[Event]:
     if CachedEvents and CachedEventsExpire > datetime.datetime.now():
         return CachedEvents
     events: List[Event] = []
+    event_ids: List[str] = []
     for url in URLS:
         event_divs = get_raw_events(url)
         for event_div in event_divs:
             event = parse_event_div(event_div)
+            if event.id in event_ids:
+                continue
             events.append(event)
+            event_ids.append(event.id)
     _refresh_cache(events)
     return events
 
