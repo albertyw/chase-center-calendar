@@ -1,4 +1,6 @@
+import copy
 import datetime
+import json
 from typing import Optional
 from zoneinfo import ZoneInfo
 
@@ -41,3 +43,8 @@ class Event():
     @varsnap
     def end(self) -> datetime.datetime:
         return self.date + datetime.timedelta(hours=self.duration)
+
+    def serialize(self) -> str:
+        data_dict = copy.deepcopy(self.__dict__)
+        data_dict['date'] = data_dict['date'].isoformat()
+        return json.dumps(data_dict, indent=4, sort_keys=True)
