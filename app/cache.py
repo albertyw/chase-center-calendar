@@ -1,8 +1,13 @@
 import json
+import os
 from pathlib import Path
-from typing import List
+import time
+from typing import List, Optional
 
 from app.event import Event
+
+
+CACHE_DURATION = 60 * 60
 
 
 def get_cache_file(name: str) -> Path:
@@ -10,11 +15,18 @@ def get_cache_file(name: str) -> Path:
     return file_path
 
 
-def read_cache(name: str) -> List[Event]:
+def read_cache(name: str) -> Optional[List[Event]]:
     path = get_cache_file(name)
+    if not path.is_file():
+        return None
+    if time.time() - os.path.getmtime(path) > CACHE_DURATION:
+        return None
     with open(path, 'r') as handle:
         data = handle.read()
-    serialized_events = json.loads(data)
+    try:
+        serialized_events = json.loads(data)
+    except json.decoder.JSONDecodeError:
+        return None
     events = [Event.deserialize(e) for e in serialized_events]
     return events
 
