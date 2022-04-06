@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import copy
 import datetime
 import json
@@ -48,3 +50,11 @@ class Event():
         data_dict = copy.deepcopy(self.__dict__)
         data_dict['date'] = data_dict['date'].isoformat()
         return json.dumps(data_dict, indent=4, sort_keys=True)
+
+    @staticmethod
+    def deserialize(serialized: str) -> Event:
+        event = Event()
+        data_dict = json.loads(serialized)
+        data_dict['date'] = datetime.datetime.fromisoformat(data_dict['date'])
+        event.__dict__ = data_dict
+        return event
