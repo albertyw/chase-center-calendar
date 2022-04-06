@@ -1,15 +1,15 @@
 # Core packages
 python-dotenv==0.20.0  # Read environment variables from .env
-Flask==2.1.0           # Web microframework
+Flask==2.1.1           # Web microframework
 uWSGI==2.0.20          # Application server
-syspath==3.0.0         # Modify paths
+syspath==3.0.1         # Modify paths
 
 # Features
 beautifulsoup4==4.10.0 # HTML Parser
 flask-sitemap==0.4.0   # Web sitemaps
 icalendar==4.0.9       # iCal generator
 python-dateutil==2.8.2 # Datetime manipulation
-python-slugify==5.0.2  # Generate string slugs
+python-slugify==6.1.1  # Generate string slugs
 
 # Monitoring/tracking/logging
 blinker==1.4           # Dependency of rollbar
