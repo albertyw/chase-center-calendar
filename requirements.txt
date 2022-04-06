@@ -9,7 +9,7 @@ beautifulsoup4==4.10.0 # HTML Parser
 flask-sitemap==0.4.0   # Web sitemaps
 icalendar==4.0.9       # iCal generator
 python-dateutil==2.8.2 # Datetime manipulation
-python-slugify==5.0.2  # Generate string slugs
+python-slugify==6.1.1  # Generate string slugs
 
 # Monitoring/tracking/logging
 blinker==1.4           # Dependency of rollbar
