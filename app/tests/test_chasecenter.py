@@ -2,14 +2,14 @@ from datetime import datetime
 import json
 from pathlib import Path
 import tempfile
-from unittest import TestCase
+from unittest import TestCase, skip
 from unittest.mock import MagicMock, patch
 
 from app import cache, chasecenter
 from app.event import TIMEZONE
 
 
-EXAMPLE_RAW_EVENT = {
+EXAMPLE_RAW_EVENT: chasecenter.RawEvent = {
     "fields": {
         "id": "example id",
         "slug": None,
@@ -66,7 +66,15 @@ class TestEvent(TestCase):
 
 
 class TestGetRawEvents(TestCase):
+    @skip("Requires network access")
     def test_get_events(self) -> None:
+        events = chasecenter.get_raw_events()
+        self.assertTrue(len(events) > 0)
+
+    @patch('requests.post')
+    def test_get_events_mock(self, mock_post: MagicMock) -> None:
+        raw_event = {'data': {'contentByType': {'items': [EXAMPLE_RAW_EVENT]}}}
+        mock_post().json.return_value = raw_event
         events = chasecenter.get_raw_events()
         self.assertTrue(len(events) > 0)
 
@@ -90,8 +98,14 @@ class TestGetEvents(TestCase):
     def tearDown(self) -> None:
         self.mock_file.close()
 
+    @patch('app.chasecenter.get_raw_events')
     @patch('app.cache.get_cache_file')
-    def test_get_events(self, mock_file: MagicMock) -> None:
+    def test_get_events(
+        self,
+        mock_file: MagicMock,
+        mock_get_raw_events: MagicMock
+    ) -> None:
+        mock_get_raw_events.return_value = [EXAMPLE_RAW_EVENT]
         mock_file.return_value = Path(self.mock_file.name)
         events = chasecenter.get_events()
         self.assertTrue(len(events) > 0)
