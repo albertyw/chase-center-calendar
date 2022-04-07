@@ -72,7 +72,16 @@ SAMPLE_EVENT_DATA = """<div class="ds-events-group">
 
 
 class TestGetRawEvents(unittest.TestCase):
+    @unittest.skip("Requires network access")
     def test_get(self) -> None:
+        event_divs = oraclepark.get_raw_events(oraclepark.URLS[0])
+        self.assertGreater(len(event_divs), 0)
+        for event_div in event_divs:
+            self.assertGreater(len(event_div), 0)
+
+    @patch('requests.get')
+    def test_get_mocked(self, mock_get: MagicMock) -> None:
+        mock_get().content = SAMPLE_EVENT_DATA
         event_divs = oraclepark.get_raw_events(oraclepark.URLS[0])
         self.assertGreater(len(event_divs), 0)
         for event_div in event_divs:
@@ -116,11 +125,13 @@ class TestGetEvents(unittest.TestCase):
     def tearDown(self) -> None:
         self.mock_file.close()
 
+    @patch('requests.get')
     @patch('app.cache.get_cache_file')
-    def test_get(self, mock_file: MagicMock) -> None:
+    def test_get(self, mock_file: MagicMock, mock_get: MagicMock) -> None:
+        mock_get().content = SAMPLE_EVENT_DATA
         mock_file.return_value = Path(self.mock_file.name)
         events = oraclepark.get_events()
-        self.assertGreater(len(events), 1)
+        self.assertGreater(len(events), 0)
         ids = [e.id for e in events]
         self.assertEqual(len(ids), len(set(ids)))
 
