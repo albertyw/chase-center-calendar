@@ -1,5 +1,8 @@
 import datetime
+from pathlib import Path
+import tempfile
 import unittest
+from unittest.mock import MagicMock, patch
 
 from bs4 import BeautifulSoup
 
@@ -107,12 +110,20 @@ class TestParseEventDiv(unittest.TestCase):
 
 
 class TestGetEvents(unittest.TestCase):
-    def test_get(self) -> None:
+    def setUp(self) -> None:
+        self.mock_file = tempfile.NamedTemporaryFile()
+
+    def tearDown(self) -> None:
+        self.mock_file.close()
+
+    @patch('app.cache.get_cache_file')
+    def test_get(self, mock_file: MagicMock) -> None:
+        mock_file.return_value = Path(self.mock_file.name)
         events = oraclepark.get_events()
         self.assertGreater(len(events), 1)
         ids = [e.id for e in events]
         self.assertEqual(len(ids), len(set(ids)))
 
-        oraclepark.CachedEvents = [oraclepark.CachedEvents[0]]
-        events = oraclepark.get_events()
-        self.assertEqual(events, oraclepark.CachedEvents)
+        new_events = oraclepark.get_events()
+        self.assertEqual(len(new_events), len(events))
+        self.assertEqual(new_events[0].id, events[0].id)

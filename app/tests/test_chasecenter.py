@@ -1,9 +1,11 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 import json
+from pathlib import Path
+import tempfile
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
-from app import chasecenter
+from app import cache, chasecenter
 from app.event import TIMEZONE
 
 
@@ -83,10 +85,14 @@ class TestGetRawEvents(TestCase):
 
 class TestGetEvents(TestCase):
     def setUp(self) -> None:
-        chasecenter.CachedEvents = []
-        chasecenter.CachedEventsExpire = datetime.now()
+        self.mock_file = tempfile.NamedTemporaryFile()
 
-    def test_get_events(self) -> None:
+    def tearDown(self) -> None:
+        self.mock_file.close()
+
+    @patch('app.cache.get_cache_file')
+    def test_get_events(self, mock_file: MagicMock) -> None:
+        mock_file.return_value = Path(self.mock_file.name)
         events = chasecenter.get_events()
         self.assertTrue(len(events) > 0)
         event = events[0]
@@ -99,21 +105,33 @@ class TestGetEvents(TestCase):
         self.assertTrue(isinstance(event.duration, int))
 
     @patch('app.chasecenter.get_raw_events')
-    def test_get_cached_events(self, mock_get_raw_events: MagicMock) -> None:
+    @patch('app.cache.get_cache_file')
+    def test_get_cached_events(
+        self,
+        mock_file: MagicMock,
+        mock_get_raw_events: MagicMock
+    ) -> None:
+        mock_file.return_value = Path(self.mock_file.name)
         event = chasecenter.initialize_chase_event(EXAMPLE_RAW_EVENT)
-        chasecenter.CachedEvents = [event]
-        chasecenter.CachedEventsExpire += timedelta(days=1)
+        cache.save_cache('chasecenter', [event])
         events = chasecenter.get_events()
-        self.assertEqual(events, [event])
-        self.assertEqual(chasecenter.CachedEvents, [event])
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].id, event.id)
         self.assertFalse(mock_get_raw_events.called)
 
     @patch('app.chasecenter.get_raw_events')
-    def test_caches_events(self, mock_get_raw_events: MagicMock) -> None:
+    @patch('app.cache.get_cache_file')
+    def test_caches_events(
+        self,
+        mock_file: MagicMock,
+        mock_get_raw_events: MagicMock
+    ) -> None:
+        mock_file.return_value = Path(self.mock_file.name)
         mock_get_raw_events.return_value = [EXAMPLE_RAW_EVENT]
         events_1 = chasecenter.get_events()
         self.assertTrue(mock_get_raw_events.called)
         mock_get_raw_events.reset_mock()
         events_2 = chasecenter.get_events()
         self.assertFalse(mock_get_raw_events.called)
-        self.assertEqual(events_1, events_2)
+        self.assertEqual(len(events_1), len(events_2))
+        self.assertEqual(events_1[0].id, events_2[0].id)
