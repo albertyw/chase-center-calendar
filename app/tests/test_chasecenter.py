@@ -69,14 +69,14 @@ class TestGetRawEvents(TestCase):
     @skip("Requires network access")
     def test_get_events(self) -> None:
         events = chasecenter.get_raw_events()
-        self.assertTrue(len(events) > 0)
+        self.assertGreater(len(events), 0)
 
     @patch('requests.post')
     def test_get_events_mock(self, mock_post: MagicMock) -> None:
         raw_event = {'data': {'contentByType': {'items': [EXAMPLE_RAW_EVENT]}}}
         mock_post().json.return_value = raw_event
         events = chasecenter.get_raw_events()
-        self.assertTrue(len(events) > 0)
+        self.assertGreater(len(events), 0)
 
     @patch('requests.post')
     def test_get_events_no_json(self, mock_post: MagicMock) -> None:
@@ -108,7 +108,7 @@ class TestGetEvents(TestCase):
         mock_get_raw_events.return_value = [EXAMPLE_RAW_EVENT]
         mock_file.return_value = Path(self.mock_file.name)
         events = chasecenter.get_events()
-        self.assertTrue(len(events) > 0)
+        self.assertGreater(len(events), 0)
         event = events[0]
         self.assertTrue(isinstance(event.title, str))
         self.assertTrue(isinstance(event.date_string, str))
