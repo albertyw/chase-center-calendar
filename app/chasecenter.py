@@ -1,12 +1,12 @@
 import datetime
 import json
-import random
 from typing import List, Mapping, Optional, Union, cast
 
 import requests
 import rollbar
 from varsnap import varsnap
 
+from app import cache
 from app.event import Event, TIMEZONE
 
 
@@ -81,23 +81,12 @@ def get_raw_events() -> RawQueryResponse:
     return cast(RawQueryResponse, raw_query_response)
 
 
-CachedEvents: List[Event] = []
-CachedEventsExpire = datetime.datetime.now()
-
-
 def get_events() -> List[Event]:
-    global CachedEvents, CachedEventsExpire
-    if CachedEvents and CachedEventsExpire > datetime.datetime.now():
-        return CachedEvents
+    events = cache.read_cache('chasecenter')
+    if events:
+        return events
     raw_events = get_raw_events()
-    events: List[Event] = [initialize_chase_event(e) for e in raw_events]
+    events = [initialize_chase_event(e) for e in raw_events]
     events = sorted(events, key=lambda e: e.date)
-    _refresh_cache(events)
+    cache.save_cache('chasecenter', events)
     return events
-
-
-def _refresh_cache(events: List[Event]) -> None:
-    global CachedEvents, CachedEventsExpire
-    CachedEvents = events
-    cache_duration = datetime.timedelta(minutes=random.randint(30, 90))
-    CachedEventsExpire = datetime.datetime.now() + cache_duration
