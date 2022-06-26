@@ -28,7 +28,7 @@ steps:
       CC_TEST_REPORTER_ID: 2fd1548c4a64215b1a8790e4cf423b329dda550bcf437b5e5835c16fd0da332b
 
   - name: Test Node
-    image: satantime/puppeteer-node:16-bullseye-slim
+    image: satantime/puppeteer-node:18-bullseye-slim
     commands:
       - ln -fs .env.development .env
       - npm ci
@@ -57,7 +57,7 @@ steps:
       - Test Bash
       - Test Dockerfile
       - Test Nginx
-    image: plugins/docker:19
+    image: plugins/docker:20
     settings:
       repo: chase-center-calendar
       tags: test

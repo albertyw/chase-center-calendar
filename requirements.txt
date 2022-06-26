@@ -1,6 +1,6 @@
 # Core packages
 python-dotenv==0.20.0  # Read environment variables from .env
-Flask==2.1.1           # Web microframework
+Flask==2.1.2           # Web microframework
 uWSGI==2.0.20          # Application server
 syspath==3.0.1         # Modify paths
 
@@ -13,5 +13,5 @@ python-slugify==6.1.1  # Generate string slugs
 
 # Monitoring/tracking/logging
 blinker==1.4           # Dependency of rollbar
-rollbar==0.16.2        # rollbar.com error logging
+rollbar==0.16.3        # rollbar.com error logging
 varsnap==1.5.1         # Test discovery
