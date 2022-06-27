@@ -39,7 +39,7 @@ server {
 
     location /static/ {
         include          snippets/headers.conf;
-        root             /home/albertyw/chase-center-calendar/static/mount/;
+        alias            /home/albertyw/chase-center-calendar/static/mount/;
         add_header       'Access-Control-Allow-Origin'   'https://www.chasecentercalendar.com';
         add_header       'Access-Control-Allow-Methods'  'GET, HEAD, OPTIONS';
         add_header       'Access-Control-Allow-Headers'  'range';
