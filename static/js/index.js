@@ -1,8 +1,8 @@
 var thirdParty = require('./thirdparty.js');
 thirdParty.setupRollbar();
 thirdParty.setupLogfit();
-thirdParty.setupSegment();
 thirdParty.setupVarsnap();
+thirdParty.setupGoogleAnalytics();
 require('./global.js');
 
 var calculateFibonacci = require('./fibonacci.js');
