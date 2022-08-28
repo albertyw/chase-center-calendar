@@ -1,8 +1,8 @@
 import os
-from typing import Tuple
 
 import dotenv
-from flask import Flask, Response, render_template, got_request_exception
+from flask import Flask, Response, got_request_exception, render_template, \
+    send_file
 from flask_sitemap import Sitemap
 from syspath import get_current_path, git_root
 from varsnap import varsnap
@@ -52,8 +52,20 @@ app.register_blueprint(handlers)
 
 @app.route("/robots.txt")
 @varsnap
-def robots() -> str:
-    return render_template("robots.txt")
+def robots() -> Response:
+    return send_file('templates/robots.txt', mimetype='text/plain')
+
+
+@app.route("/.well-known/security.txt")
+@varsnap
+def security() -> Response:
+    return send_file('templates/wellknown/security.txt', mimetype='text/plain')
+
+
+@app.route("/humans.txt")
+@varsnap
+def humans() -> Response:
+    return send_file('templates/wellknown/humans.txt', mimetype='text/plain')
 
 
 @app.route("/health")
@@ -63,7 +75,7 @@ def health() -> Response:
 
 # https://github.com/pallets/flask/issues/4295
 @app.errorhandler(404)
-def page_not_found(e: Exception) -> Tuple[str, int]:
+def page_not_found(e: Exception) -> tuple[str, int]:
     return render_template("404.htm"), 404
 
 

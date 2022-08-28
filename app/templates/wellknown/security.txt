@@ -1,0 +1,4 @@
+Contact: mailto:security@chasecentercalendar.com
+Expires: 2030-01-01T08:00:00.000Z
+Preferred-Languages: en
+Canonical: https://www.chasecentercalendar.com/.well-known/security.txt
