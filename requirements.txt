@@ -7,7 +7,7 @@ syspath==3.0.1         # Modify paths
 # Features
 beautifulsoup4==4.11.1 # HTML Parser
 flask-sitemap==0.4.0   # Web sitemaps
-icalendar==4.0.9       # iCal generator
+icalendar==4.1.0       # iCal generator
 python-dateutil==2.8.2 # Datetime manipulation
 python-slugify==6.1.1  # Generate string slugs
 
