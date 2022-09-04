@@ -58,3 +58,15 @@ class Event():
         data_dict['date'] = datetime.datetime.fromisoformat(data_dict['date'])
         event.__dict__ = data_dict
         return event
+
+    def serialize2(self) -> dict[str, str]:
+        data_dict = copy.deepcopy(self.__dict__)
+        data_dict['date'] = data_dict['date'].isoformat()
+        return data_dict
+
+    @staticmethod
+    def deserialize2(data_dict: dict[str, str]) -> Event:
+        event = Event()
+        event.__dict__ = data_dict
+        event.date = datetime.datetime.fromisoformat(data_dict['date'])
+        return event
