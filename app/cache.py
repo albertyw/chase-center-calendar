@@ -27,12 +27,12 @@ def read_cache(name: str) -> Optional[List[Event]]:
         serialized_events = json.loads(data)
     except json.decoder.JSONDecodeError:
         return None
-    events = [Event.deserialize2(e) for e in serialized_events]
+    events = [Event.deserialize(e) for e in serialized_events]
     return events
 
 
 def save_cache(name: str, events: List[Event]) -> None:
-    serialized_events = [e.serialize2() for e in events]
+    serialized_events = [e.serialize() for e in events]
     data = json.dumps(serialized_events)
     path = get_cache_file(name)
     with open(path, 'w') as handle:
