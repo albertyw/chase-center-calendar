@@ -8,9 +8,9 @@ class TestEvent(TestCase):
     def test_serialize(self) -> None:
         e = chasecenter.initialize_chase_event(EXAMPLE_RAW_EVENT)
         serialized = e.serialize()
-        self.assertIn('San Francisco', serialized)
-        self.assertIn('Impala', serialized)
-        self.assertIn('2020-09-15T19:30:00-07:00', serialized)
+        self.assertIn('San Francisco', serialized['location_name'])
+        self.assertIn('Impala', serialized['title'])
+        self.assertIn('2020-09-15T19:30:00-07:00', serialized['date'])
 
     def test_deserialize(self) -> None:
         e = chasecenter.initialize_chase_event(EXAMPLE_RAW_EVENT)

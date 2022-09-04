@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import copy
 import datetime
-import json
 from typing import Optional
 from zoneinfo import ZoneInfo
 
@@ -46,15 +45,14 @@ class Event():
     def end(self) -> datetime.datetime:
         return self.date + datetime.timedelta(hours=self.duration)
 
-    def serialize(self) -> str:
+    def serialize(self) -> dict[str, str]:
         data_dict = copy.deepcopy(self.__dict__)
         data_dict['date'] = data_dict['date'].isoformat()
-        return json.dumps(data_dict, indent=4, sort_keys=True)
+        return data_dict
 
     @staticmethod
-    def deserialize(serialized: str) -> Event:
+    def deserialize(data_dict: dict[str, str]) -> Event:
         event = Event()
-        data_dict = json.loads(serialized)
-        data_dict['date'] = datetime.datetime.fromisoformat(data_dict['date'])
         event.__dict__ = data_dict
+        event.date = datetime.datetime.fromisoformat(data_dict['date'])
         return event
