@@ -5,7 +5,7 @@ from varsnap import test
 from app import cache, serve
 
 
-def setUpModule():
+def setUpModule() -> None:
     cache.get_cache_file('chasecenter').unlink(missing_ok=True)
     cache.get_cache_file('oraclepark').unlink(missing_ok=True)
 
