@@ -51,7 +51,7 @@ def initialize_chase_event(event_data: RawEvent) -> Event:
     event.title = cast(str, data['title'])
     event.subtitle = cast(Optional[str], data['subtitle'])
     event.date_string = cast(str, data['date'])
-    date = datetime.datetime.fromisoformat(event.date_string, )
+    date = datetime.datetime.fromisoformat(event.date_string)
     event.date = date.replace(tzinfo=TIMEZONE)
     event.location_name = cast(Optional[str], data['locationName'])
     event.location_type = cast(Optional[str], data['locationType'])
