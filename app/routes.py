@@ -8,9 +8,7 @@ handlers = Blueprint('handlers', __name__)
 
 @handlers.route("/")
 def index() -> str:
-    events = chasecenter.get_events()
-    events = [e for e in events if e.show and e.is_future]
-    return render_template("index.htm", events=events)
+    return render_template("index.htm")
 
 
 @handlers.route("/ical_view")
