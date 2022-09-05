@@ -26,7 +26,8 @@ class TestSaveCache(TestCase):
     def test_save_cache(self, mock_file: MagicMock) -> None:
         mock_file.return_value = Path(self.mock_file.name)
         cache.save_cache(cache.CACHED_CHASECENTER, self.events)
-        self.assertTrue(cache.get_cache_file(cache.CACHED_CHASECENTER).is_file())
+        cache_file = cache.get_cache_file(cache.CACHED_CHASECENTER)
+        self.assertTrue(cache_file.is_file())
 
 
 class TestReadCache(TestCase):
