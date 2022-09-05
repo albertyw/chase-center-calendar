@@ -59,7 +59,7 @@ def parse_event_div(event_div: BeautifulSoup) -> Event:
 
 
 def get_events() -> List[Event]:
-    events = cache.read_cache('oraclepark')
+    events = cache.read_cache(cache.CACHED_ORACLEPARK)
     if events:
         return events
     events = []
@@ -72,5 +72,5 @@ def get_events() -> List[Event]:
                 continue
             events.append(event)
             event_ids.append(event.id)
-    cache.save_cache('oraclepark', events)
+    cache.save_cache(cache.CACHED_ORACLEPARK, events)
     return events

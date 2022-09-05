@@ -6,8 +6,10 @@ from app import cache, serve
 
 
 def setUpModule() -> None:
-    cache.get_cache_file('chasecenter').unlink(missing_ok=True)
-    cache.get_cache_file('oraclepark').unlink(missing_ok=True)
+    cache.get_cache_file(cache.CACHED_CHASECENTER).unlink(missing_ok=True)
+    cache.get_cache_file(cache.CACHED_ORACLEPARK).unlink(missing_ok=True)
+    cache.get_cache_file(cache.CACHED_CHASECENTER_ICS).unlink(missing_ok=True)
+    cache.get_cache_file(cache.CACHED_ORACLEPARK_ICS).unlink(missing_ok=True)
 
 
 class PageCase(unittest.TestCase):
