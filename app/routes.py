@@ -47,11 +47,11 @@ def oracle_park() -> str:
 
 @handlers.route("/oraclepark.ics")
 def oracle_park_ics_file() -> Response:
-    cached_cal = cache.read_raw_cache(cache.CACHED_CHASECENTER_ICS)
+    cached_cal = cache.read_raw_cache(cache.CACHED_ORACLEPARK_ICS)
     if not cached_cal:
         events = oraclepark.get_events()
         cal = ical.generate_calendar(events)
-        cache.save_raw_cache(cache.CACHED_CHASECENTER_ICS, cal)
+        cache.save_raw_cache(cache.CACHED_ORACLEPARK_ICS, cal)
     else:
         cal = cached_cal
     response = make_response(cal)
