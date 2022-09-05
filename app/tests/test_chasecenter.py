@@ -135,7 +135,7 @@ class TestGetEvents(TestCase):
     ) -> None:
         mock_file.return_value = Path(self.mock_file.name)
         event = chasecenter.initialize_chase_event(EXAMPLE_RAW_EVENT)
-        cache.save_cache('chasecenter', [event])
+        cache.save_cache(cache.CACHED_CHASECENTER, [event])
         events = chasecenter.get_events()
         self.assertEqual(len(events), 1)
         self.assertEqual(events[0].id, event.id)

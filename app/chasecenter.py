@@ -82,11 +82,11 @@ def get_raw_events() -> RawQueryResponse:
 
 
 def get_events() -> List[Event]:
-    events = cache.read_cache('chasecenter')
+    events = cache.read_cache(cache.CACHED_CHASECENTER)
     if events:
         return events
     raw_events = get_raw_events()
     events = [initialize_chase_event(e) for e in raw_events]
     events = sorted(events, key=lambda e: e.date)
-    cache.save_cache('chasecenter', events)
+    cache.save_cache(cache.CACHED_CHASECENTER, events)
     return events

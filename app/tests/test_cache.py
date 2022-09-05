@@ -25,8 +25,8 @@ class TestSaveCache(TestCase):
     @patch('app.cache.get_cache_file')
     def test_save_cache(self, mock_file: MagicMock) -> None:
         mock_file.return_value = Path(self.mock_file.name)
-        cache.save_cache('chasecenter', self.events)
-        self.assertTrue(cache.get_cache_file('chasecenter').is_file())
+        cache.save_cache(cache.CACHED_CHASECENTER, self.events)
+        self.assertTrue(cache.get_cache_file(cache.CACHED_CHASECENTER).is_file())
 
 
 class TestReadCache(TestCase):
@@ -43,8 +43,8 @@ class TestReadCache(TestCase):
     @patch('app.cache.get_cache_file')
     def test_read_cache(self, mock_file: MagicMock) -> None:
         mock_file.return_value = Path(self.mock_file.name)
-        cache.save_cache('chasecenter', self.events)
-        events = cache.read_cache('chasecenter')
+        cache.save_cache(cache.CACHED_CHASECENTER, self.events)
+        events = cache.read_cache(cache.CACHED_CHASECENTER)
         assert events is not None
         self.assertEqual(len(self.events), len(events))
         self.assertEqual(self.events[0].id, events[0].id)
@@ -54,19 +54,19 @@ class TestReadCache(TestCase):
     @patch('app.cache.get_cache_file')
     def test_read_malformed_cache(self, mock_file: MagicMock) -> None:
         mock_file.return_value = Path(self.mock_file.name)
-        events = cache.read_cache('chasecenter')
+        events = cache.read_cache(cache.CACHED_CHASECENTER)
         self.assertEqual(events, None)
 
     @patch('app.cache.get_cache_file')
     def test_read_no_cache(self, mock_file: MagicMock) -> None:
         mock_file.return_value = Path('/')
-        events = cache.read_cache('chasecenter')
+        events = cache.read_cache(cache.CACHED_CHASECENTER)
         self.assertEqual(events, None)
 
     @patch('app.cache.get_cache_file')
     def test_read_expired_cache(self, mock_file: MagicMock) -> None:
         mock_file.return_value = Path(self.mock_file.name)
         cache.CACHE_DURATION = 0
-        cache.save_cache('chasecenter', self.events)
-        events = cache.read_cache('chasecenter')
+        cache.save_cache(cache.CACHED_CHASECENTER, self.events)
+        events = cache.read_cache(cache.CACHED_CHASECENTER)
         self.assertEqual(events, None)
