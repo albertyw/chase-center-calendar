@@ -20,7 +20,8 @@ def ical_view() -> str:
 def chase_center() -> str:
     events = chasecenter.get_events()
     events = [e for e in events if e.show and e.is_future]
-    return render_template("chase_center.htm", events=events)
+    page = render_template("chase_center.htm", events=events)
+    return page
 
 
 @handlers.route("/chasecenter.ics")
@@ -42,7 +43,8 @@ def ical_file() -> Response:
 def oracle_park() -> str:
     events = oraclepark.get_events()
     events = [e for e in events if e.show and e.is_future]
-    return render_template("oracle_park.htm", events=events)
+    page = render_template("oracle_park.htm", events=events)
+    return page
 
 
 @handlers.route("/oraclepark.ics")
