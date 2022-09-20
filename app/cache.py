@@ -12,6 +12,7 @@ CACHED_CHASECENTER = 'chasecenter'
 CACHED_ORACLEPARK = 'oraclepark'
 CACHED_CHASECENTER_HTML = 'chasecenter.html'
 CACHED_CHASECENTER_ICS = 'chasecenter.ics'
+CACHED_ORACLEPARK_HTML = 'oraclepark.html'
 CACHED_ORACLEPARK_ICS = 'oraclepark.ics'
 
 

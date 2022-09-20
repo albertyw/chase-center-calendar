@@ -46,9 +46,14 @@ def ical_file() -> Response:
 
 @handlers.route("/oracle_park")
 def oracle_park() -> str:
-    events = oraclepark.get_events()
-    events = [e for e in events if e.show and e.is_future]
-    page = render_template("oracle_park.htm", events=events)
+    cached_page = cache.read_raw_cache(cache.CACHED_ORACLEPARK_HTML)
+    if not cached_page:
+        events = oraclepark.get_events()
+        events = [e for e in events if e.show and e.is_future]
+        page = render_template("oracle_park.htm", events=events)
+        cache.save_raw_cache(cache.CACHED_ORACLEPARK_HTML, page)
+    else:
+        page = cached_page
     return page
 
 
