@@ -10,6 +10,7 @@ from app.event import Event
 CACHE_DURATION = 60 * 60
 CACHED_CHASECENTER = 'chasecenter'
 CACHED_ORACLEPARK = 'oraclepark'
+CACHED_CHASECENTER_HTML = 'chasecenter.html'
 CACHED_CHASECENTER_ICS = 'chasecenter.ics'
 CACHED_ORACLEPARK_ICS = 'oraclepark.ics'
 

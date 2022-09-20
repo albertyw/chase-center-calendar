@@ -18,9 +18,14 @@ def ical_view() -> str:
 
 @handlers.route("/chase_center")
 def chase_center() -> str:
-    events = chasecenter.get_events()
-    events = [e for e in events if e.show and e.is_future]
-    page = render_template("chase_center.htm", events=events)
+    cached_page = cache.read_raw_cache(cache.CACHED_CHASECENTER_HTML)
+    if not cached_page:
+        events = chasecenter.get_events()
+        events = [e for e in events if e.show and e.is_future]
+        page = render_template("chase_center.htm", events=events)
+        cache.save_raw_cache(cache.CACHED_CHASECENTER_HTML, page)
+    else:
+        page = cached_page
     return page
 
 
