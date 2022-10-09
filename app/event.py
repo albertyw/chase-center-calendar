@@ -27,20 +27,20 @@ class Event():
         self.hide_road_game: bool = False
         self.duration: int = 60
 
-    @property  # type: ignore
+    @property
     @varsnap
     def show(self) -> bool:
         if self.hide_road_game:
             return False
         return True
 
-    @property  # type: ignore
+    @property
     @varsnap
     def is_future(self) -> bool:
         cutoff = datetime.datetime.now(TIMEZONE) - datetime.timedelta(days=1)
         return self.date > cutoff
 
-    @property  # type: ignore
+    @property
     @varsnap
     def end(self) -> datetime.datetime:
         return self.date + datetime.timedelta(hours=self.duration)
