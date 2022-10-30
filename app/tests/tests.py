@@ -1,5 +1,6 @@
 import unittest
 
+from dotenv import dotenv_values
 from varsnap import test
 
 from app import cache, serve
@@ -67,7 +68,11 @@ class PageCase(unittest.TestCase):
 
 class TestIntegration(unittest.TestCase):
     def test_varsnap(self) -> None:
-        with serve.app.test_request_context():
+        config = dotenv_values('.env.production')
+        serve.app.config['SERVER_NAME'] = config['SERVER_NAME']
+        with serve.app.test_request_context(
+            environ_overrides={'wsgi.url_scheme': 'https'},
+        ):
             matches, logs = test()
         if matches is None:
             raise unittest.case.SkipTest('No Snaps found')  # pragma: no cover

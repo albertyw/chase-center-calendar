@@ -15,7 +15,7 @@ Development
 ### Setup (using [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/)):
 
 ```bash
-mkvirtualenv app -p python3.10
+mkvirtualenv app -p python3.11
 pip install -r requirements.txt
 pip install -r requirements-test.txt
 ln -s .env.development .env
