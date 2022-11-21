@@ -7,11 +7,11 @@ syspath==3.0.1         # Modify paths
 # Features
 beautifulsoup4==4.11.1 # HTML Parser
 flask-sitemap==0.4.0   # Web sitemaps
-icalendar==4.1.0       # iCal generator
+icalendar==5.0.2       # iCal generator
 python-dateutil==2.8.2 # Datetime manipulation
-python-slugify==6.1.2  # Generate string slugs
+python-slugify==7.0.0  # Generate string slugs
 
 # Monitoring/tracking/logging
 blinker==1.5           # Dependency of rollbar
 rollbar==0.16.3        # rollbar.com error logging
-varsnap==1.5.3         # Test discovery
+varsnap==1.5.4         # Test discovery
