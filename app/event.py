@@ -30,9 +30,7 @@ class Event():
     @property
     @varsnap
     def show(self) -> bool:
-        if self.hide_road_game:
-            return False
-        return True
+        return not self.hide_road_game
 
     @property
     @varsnap
