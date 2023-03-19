@@ -6,5 +6,5 @@ flake8==6.0.0                    # Python linting
 mypy==1.1.1                      # Type checking
 types-beautifulsoup4==4.11.6.7   # Type stubs for beautifulsoup4 package
 types-python-dateutil==2.8.19.10 # Type stubs for dateutil package
-types-python-slugify==8.0.0.0    # Type stubs for python-slugify package
+types-python-slugify==8.0.0.1    # Type stubs for python-slugify package
 types-requests==2.28.11.8        # Type stubs for requests package
