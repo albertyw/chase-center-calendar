@@ -68,11 +68,11 @@ class TestEvent(TestCase):
 class TestGetRawEvents(TestCase):
     def setUp(self) -> None:
         self.mock_rollbar = MagicMock()
-        self.original_rollbar = getattr(chasecenter, 'rollbar')
-        setattr(chasecenter, 'rollbar', self.mock_rollbar)
+        self.original_rollbar = chasecenter.rollbar  # type: ignore[attr-defined]
+        chasecenter.rollbar = self.mock_rollbar  # type: ignore[attr-defined]
 
     def tearDown(self) -> None:
-        setattr(chasecenter, 'rollbar', self.original_rollbar)
+        chasecenter.rollbar = self.original_rollbar  # type: ignore[attr-defined]
 
     @skip("Requires network access")
     def test_get_events(self) -> None:
