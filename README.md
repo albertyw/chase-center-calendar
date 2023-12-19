@@ -15,7 +15,7 @@ Development
 ### Setup (using [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/)):
 
 ```bash
-mkvirtualenv app -p python3.11
+mkvirtualenv app -p python3.12
 pip install -r requirements.txt
 pip install -r requirements-test.txt
 ln -s .env.development .env
@@ -33,7 +33,7 @@ python app/serve.py
 
 ```bash
 ruff check .
-mypy . --ignore-missing-imports --strict
+mypy .
 shellcheck --exclude=SC1091 bin/*.sh
 coverage run -m unittest discover
 npm test
