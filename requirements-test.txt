@@ -4,7 +4,7 @@ ruff==0.1.8                      # Python linter
 
 # Types
 mypy==1.7.1                      # Type checking
-types-beautifulsoup4==4.12.0.6   # Type stubs for beautifulsoup4 package
+types-beautifulsoup4==4.12.0.7   # Type stubs for beautifulsoup4 package
 types-python-dateutil==2.8.19.14 # Type stubs for dateutil package
 types-python-slugify==8.0.0.3    # Type stubs for python-slugify package
-types-requests==2.31.0.4         # Type stubs for requests package
+types-requests==2.31.0.10        # Type stubs for requests package
