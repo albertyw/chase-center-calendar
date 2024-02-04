@@ -35,21 +35,10 @@ server {
 
     location / {
         include          snippets/headers.conf;
-        proxy_pass       http://127.0.0.1:5013;
+        # proxy_pass       http://127.0.0.1:5013;
+        proxy_pass       https://192.168.1.127;
         proxy_buffering  off;
         add_header       'Cache-Control'                 'public';
         expires          7d;
-    }
-
-    location /static/ {
-        include          snippets/headers.conf;
-        alias            /home/albertyw/chase-center-calendar/static/mount/;
-        add_header       'Access-Control-Allow-Origin'   'https://www.chasecentercalendar.com';
-        add_header       'Access-Control-Allow-Methods'  'GET, HEAD, OPTIONS';
-        add_header       'Access-Control-Allow-Headers'  'range';
-        add_header       'Access-Control-Expose-Headers' 'content-length';
-        add_header       'Access-Control-Max-Age'        '1728000';
-        add_header       'Cache-Control'                 'public';
-        expires          24h;
     }
 }
