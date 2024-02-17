@@ -16,8 +16,7 @@ Development
 
 ```bash
 mkvirtualenv app -p python3.12
-pip install -r requirements.txt
-pip install -r requirements-test.txt
+pip install -e .[test]
 ln -s .env.development .env
 npm install
 ```
