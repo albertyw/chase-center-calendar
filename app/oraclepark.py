@@ -1,3 +1,6 @@
+import copy
+import csv
+import datetime
 from typing import List
 
 from bs4 import BeautifulSoup
@@ -10,13 +13,26 @@ from app import cache
 from app.event import Event, TIMEZONE
 
 
-URLS = [
+DOTHEBAY_URLS = [
     "https://dothebay.com/venues/oracle-park/events",
     "https://dothebay.com/venues/oracle-park/past_events",
 ]
+TICKETING_URL = (
+    "https://www.ticketing-client.com/ticketing-client/csv/GameTicketPromotionPrice.tiksrv?"
+    "team_id=137&"
+    "home_team_id=137&"
+    "display_in=singlegame&"
+    "ticket_category=Tickets&"
+    "site_section=Default&"
+    "sub_category=Default&"
+    "leave_empty_games=true&"
+    "event_type=T&"
+    "year=%s&"
+    "begin_date=%s0101"
+)
 
 
-def get_raw_events(url: str) -> List[BeautifulSoup]:
+def dothebay_get_raw_events(url: str) -> List[BeautifulSoup]:
     response = requests.get(url)
     soup = BeautifulSoup(response.content, 'html.parser')
     event_divs = soup.find_all('div', class_='ds-events-group')
@@ -24,7 +40,7 @@ def get_raw_events(url: str) -> List[BeautifulSoup]:
 
 
 @varsnap
-def parse_event_div(event_div: BeautifulSoup) -> Event:
+def dothebay_parse_event_div(event_div: BeautifulSoup) -> Event:
     event = Event()
     event.title = event_div.find_all(
         'span',
@@ -58,19 +74,76 @@ def parse_event_div(event_div: BeautifulSoup) -> Event:
     return event
 
 
+def ticketing_get_events() -> List[Event]:
+    events: List[Event] = []
+    year = datetime.datetime.now().year
+    url = TICKETING_URL % (year, year)
+    response = requests.get(url)
+    reader = csv.DictReader(response.content.decode('utf-8').splitlines())
+    for row in reader:
+        event = Event()
+        event.title = row['SUBJECT']
+        event.slug = slugify(event.title)
+        event.subtitle = row['DESCRIPTION']
+        start_time = dateutilparser.parse(row['START DATE'] + ' ' + row['START TIME'])
+        end_time = dateutilparser.parse(row['END DATE'] + ' ' + row['END TIME'])
+        duration = round((end_time - start_time).seconds / 60 / 60)
+        event.date = start_time.replace(tzinfo=TIMEZONE)
+        event.date_string = event.date.isoformat()
+        event.id = event.slug + event.date_string
+        event.location_name = row['LOCATION']
+        event.location_type = ''
+        event.ticket_required = True
+        event.ticket_available = True
+        event.ticket_sold_out = False
+        event.hide_road_game = False
+        event.duration = duration
+        if 'Oracle Park' not in event.location_name:
+            continue
+        events.append(event)
+    return events
+
+
+def deduplicate_events(
+    ticketing_events: List[Event],
+    dothebay_events: List[Event],
+) -> List[Event]:
+    events: List[Event] = copy.copy(ticketing_events)
+    event_ids: List[str] = []
+    for dothebay_event in dothebay_events:
+        if dothebay_event.id in event_ids:
+            break
+        different = True
+        for ticketing_event in ticketing_events:
+            if ticketing_event.date.year != dothebay_event.date.year:
+                break
+            if ticketing_event.date.month != dothebay_event.date.month:
+                break
+            if ticketing_event.date.day != dothebay_event.date.day:
+                break
+            other = ticketing_event.title.split(' at ')[0]
+            if other not in dothebay_event.title:
+                break
+        else:
+            different = False
+        if different:
+            events.append(dothebay_event)
+            if dothebay_event.id:
+                event_ids.append(dothebay_event.id)
+    return events
+
+
 def get_events() -> List[Event]:
     events = cache.read_cache(cache.CACHED_ORACLEPARK)
     if events:
         return events
     events = []
-    event_ids: List[str] = []
-    for url in URLS:
-        event_divs = get_raw_events(url)
+    for url in DOTHEBAY_URLS:
+        event_divs = dothebay_get_raw_events(url)
         for event_div in event_divs:
-            event = parse_event_div(event_div)
-            if event.id in event_ids:
-                continue
+            event = dothebay_parse_event_div(event_div)
             events.append(event)
-            event_ids.append(event.id)
+    ticketing_events = ticketing_get_events()
+    events = deduplicate_events(ticketing_events, events)
     cache.save_cache(cache.CACHED_ORACLEPARK, events)
     return events
