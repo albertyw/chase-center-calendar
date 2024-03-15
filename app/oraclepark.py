@@ -1,3 +1,5 @@
+import csv
+import datetime
 from typing import List
 
 from bs4 import BeautifulSoup
@@ -71,6 +73,36 @@ def dothebay_parse_event_div(event_div: BeautifulSoup) -> Event:
     return event
 
 
+def ticketing_get_events() -> List[Event]:
+    events: List[Event] = []
+    year = datetime.datetime.now().year
+    url = TICKETING_URL % (year, year)
+    response = requests.get(url)
+    reader = csv.DictReader(response.content.decode('utf-8').splitlines())
+    for row in reader:
+        event = Event()
+        event.title = row['SUBJECT']
+        event.slug = slugify(event.title)
+        event.subtitle = row['DESCRIPTION']
+        start_time = dateutilparser.parse(row['START DATE'] + ' ' + row['START TIME'])
+        end_time = dateutilparser.parse(row['END DATE'] + ' ' + row['END TIME'])
+        duration = round((end_time - start_time).seconds / 60 / 60)
+        event.date = start_time
+        event.date_string = event.date.isoformat()
+        event.id = event.slug + event.date_string
+        event.location_name = row['LOCATION']
+        event.location_type = ''
+        event.ticket_required = True
+        event.ticket_available = True
+        event.ticket_sold_out = False
+        event.hide_road_game = False
+        event.duration = duration
+        if 'Oracle Park' not in event.location_name:
+            continue
+        events.append(event)
+    return events
+
+
 def get_events() -> List[Event]:
     events = cache.read_cache(cache.CACHED_ORACLEPARK)
     if events:
@@ -85,5 +117,6 @@ def get_events() -> List[Event]:
                 continue
             events.append(event)
             event_ids.append(event.id)
+    ticketing_events = ticketing_get_events()
     cache.save_cache(cache.CACHED_ORACLEPARK, events)
     return events
