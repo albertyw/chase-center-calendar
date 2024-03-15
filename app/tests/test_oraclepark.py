@@ -152,10 +152,12 @@ class TestTicketingGetEvents(unittest.TestCase):
 class TestDeduplicateEvents(unittest.TestCase):
     def test_deduplicate_events(self) -> None:
         def generate_event(
+            id: str,
             title: Optional[str] = None,
             date: Optional[datetime.datetime] = None,
         ) -> event.Event:
             e = event.Event()
+            e.id = id
             if title:
                 e.title = title
             else:
@@ -167,26 +169,28 @@ class TestDeduplicateEvents(unittest.TestCase):
             return e
 
         ticketing_events = [
-            generate_event(),
+            generate_event('0'),
         ]
         dothebay_events = [
-            generate_event(),
-            generate_event(title='asdf'),
-            generate_event(title='Yankees vs. Giants'),
-            generate_event(date=datetime.datetime(2024, 3, 14, 8, 38, 0)),
-            generate_event(date=datetime.datetime(2024, 3, 15, 22, 38, 0)),
-            generate_event(date=datetime.datetime(2024, 4, 14, 22, 38, 0)),
-            generate_event(date=datetime.datetime(2025, 3, 14, 22, 38, 0)),
+            generate_event('0'),
+            generate_event('1'),
+            generate_event('2', title='asdf'),
+            generate_event('3', title='Yankees vs. Giants'),
+            generate_event('4', date=datetime.datetime(2024, 3, 14, 8, 38, 0)),
+            generate_event('5', date=datetime.datetime(2024, 3, 15, 22, 38, 0)),
+            generate_event('6', date=datetime.datetime(2024, 4, 14, 22, 38, 0)),
+            generate_event('7', date=datetime.datetime(2025, 3, 14, 22, 38, 0)),
         ]
         events = oraclepark.deduplicate_events(ticketing_events, dothebay_events)
         self.assertIn(ticketing_events[0], events)
         self.assertNotIn(dothebay_events[0], events)
-        self.assertIn(dothebay_events[1], events)
-        self.assertNotIn(dothebay_events[2], events)
+        self.assertNotIn(dothebay_events[1], events)
+        self.assertIn(dothebay_events[2], events)
         self.assertNotIn(dothebay_events[3], events)
-        self.assertIn(dothebay_events[4], events)
+        self.assertNotIn(dothebay_events[4], events)
         self.assertIn(dothebay_events[5], events)
         self.assertIn(dothebay_events[6], events)
+        self.assertIn(dothebay_events[7], events)
         self.assertEqual(len(events), 5)
 
 

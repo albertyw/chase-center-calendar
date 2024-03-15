@@ -109,21 +109,27 @@ def deduplicate_events(
     dothebay_events: List[Event],
 ) -> List[Event]:
     events: List[Event] = copy.copy(ticketing_events)
+    event_ids: List[str] = []
     for dothebay_event in dothebay_events:
+        if dothebay_event.id in event_ids:
+            break
+        different = True
         for ticketing_event in ticketing_events:
             if ticketing_event.date.year != dothebay_event.date.year:
-                events.append(dothebay_event)
                 break
             if ticketing_event.date.month != dothebay_event.date.month:
-                events.append(dothebay_event)
                 break
             if ticketing_event.date.day != dothebay_event.date.day:
-                events.append(dothebay_event)
                 break
             other = ticketing_event.title.split(' at ')[0]
             if other not in dothebay_event.title:
-                events.append(dothebay_event)
                 break
+        else:
+            different = False
+        if different:
+            events.append(dothebay_event)
+            if dothebay_event.id:
+                event_ids.append(dothebay_event.id)
     return events
 
 
