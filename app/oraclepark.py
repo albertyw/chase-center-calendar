@@ -10,11 +10,11 @@ from app import cache
 from app.event import Event, TIMEZONE
 
 
-URLS = [
+DOTHEBAY_URLS = [
     "https://dothebay.com/venues/oracle-park/events",
     "https://dothebay.com/venues/oracle-park/past_events",
 ]
-URL = (
+TICKETING_URL = (
     "https://www.ticketing-client.com/ticketing-client/csv/GameTicketPromotionPrice.tiksrv?"
     "team_id=137&"
     "home_team_id=137&"
@@ -29,7 +29,7 @@ URL = (
 )
 
 
-def get_raw_events(url: str) -> List[BeautifulSoup]:
+def dothebay_get_raw_events(url: str) -> List[BeautifulSoup]:
     response = requests.get(url)
     soup = BeautifulSoup(response.content, 'html.parser')
     event_divs = soup.find_all('div', class_='ds-events-group')
@@ -37,7 +37,7 @@ def get_raw_events(url: str) -> List[BeautifulSoup]:
 
 
 @varsnap
-def parse_event_div(event_div: BeautifulSoup) -> Event:
+def dothebay_parse_event_div(event_div: BeautifulSoup) -> Event:
     event = Event()
     event.title = event_div.find_all(
         'span',
@@ -77,10 +77,10 @@ def get_events() -> List[Event]:
         return events
     events = []
     event_ids: List[str] = []
-    for url in URLS:
-        event_divs = get_raw_events(url)
+    for url in DOTHEBAY_URLS:
+        event_divs = dothebay_get_raw_events(url)
         for event_div in event_divs:
-            event = parse_event_div(event_div)
+            event = dothebay_parse_event_div(event_div)
             if event.id in event_ids:
                 continue
             events.append(event)

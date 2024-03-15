@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 from app import oraclepark
 
 
-SAMPLE_EVENT_DATA = """<div class="ds-events-group">
+DOTHEBAY_SAMPLE_EVENT_DATA = """<div class="ds-events-group">
 <div class="ds-list-break ds-break-date">
 <div class="ds-break-left">
 <a data-ds-listings-nav-ga="DATE_HEADING" href="/events/2021/10/13">
@@ -71,29 +71,29 @@ SAMPLE_EVENT_DATA = """<div class="ds-events-group">
 """  # NOQA
 
 
-class TestGetRawEvents(unittest.TestCase):
+class TestDothebayGetRawEvents(unittest.TestCase):
     @unittest.skip("Requires network access")
     def test_get(self) -> None:
-        event_divs = oraclepark.get_raw_events(oraclepark.URLS[0])
+        event_divs = oraclepark.dothebay_get_raw_events(oraclepark.DOTHEBAY_URLS[0])
         self.assertGreater(len(event_divs), 0)
         for event_div in event_divs:
             self.assertGreater(len(event_div), 0)
 
     @patch('requests.get')
     def test_get_mocked(self, mock_get: MagicMock) -> None:
-        mock_get().content = SAMPLE_EVENT_DATA
-        event_divs = oraclepark.get_raw_events(oraclepark.URLS[0])
+        mock_get().content = DOTHEBAY_SAMPLE_EVENT_DATA
+        event_divs = oraclepark.dothebay_get_raw_events(oraclepark.DOTHEBAY_URLS[0])
         self.assertGreater(len(event_divs), 0)
         for event_div in event_divs:
             self.assertGreater(len(event_div), 0)
 
 
-class TestParseEventDiv(unittest.TestCase):
+class TestDothebayParseEventDiv(unittest.TestCase):
     def setUp(self) -> None:
-        self.event_div = BeautifulSoup(SAMPLE_EVENT_DATA, 'html.parser')
+        self.event_div = BeautifulSoup(DOTHEBAY_SAMPLE_EVENT_DATA, 'html.parser')
 
     def test_parse_event_div(self) -> None:
-        event = oraclepark.parse_event_div(self.event_div)
+        event = oraclepark.dothebay_parse_event_div(self.event_div)
         self.assertEqual(event.id, '12554109')
         self.assertEqual(
             event.title,
@@ -128,7 +128,7 @@ class TestGetEvents(unittest.TestCase):
     @patch('requests.get')
     @patch('app.cache.get_cache_file')
     def test_get(self, mock_file: MagicMock, mock_get: MagicMock) -> None:
-        mock_get().content = SAMPLE_EVENT_DATA
+        mock_get().content = DOTHEBAY_SAMPLE_EVENT_DATA
         mock_file.return_value = Path(self.mock_file.name)
         events = oraclepark.get_events()
         self.assertGreater(len(events), 0)
