@@ -70,6 +70,11 @@ DOTHEBAY_SAMPLE_EVENT_DATA = """<div class="ds-events-group">
 </div>
 """  # NOQA
 
+TICKETING_SAMPLE_EVENT_DATA = """START DATE,START TIME,START TIME ET,SUBJECT,LOCATION,DESCRIPTION,END DATE,END DATE ET,END TIME,END TIME ET,REMINDER OFF,REMINDER ON,REMINDER DATE,REMINDER TIME,REMINDER TIME ET,SHOWTIMEAS FREE,SHOWTIMEAS BUSY
+02/24/24,01:05 PM,03:05 PM,Cubs at Giants,Scottsdale Stadium - Scottsdale,"Local Radio: KNBR 680",02/24/24,02/24/24,04:05 PM,06:05 PM,FALSE,TRUE,02/24/24,12:05 PM,02:05 PM,FREE,BUSY
+03/26/24,05:05 PM,08:05 PM,Athletics at Giants,Oracle Park - San Francisco,"Local TV: NBCS BA ----- Local Radio: KNBR 680",03/26/24,03/26/24,08:05 PM,11:05 PM,FALSE,TRUE,03/26/24,04:05 PM,07:05 PM,FREE,BUSY
+""".encode('utf-8') # NOQA
+
 
 class TestDothebayGetRawEvents(unittest.TestCase):
     @unittest.skip("Requires network access")
@@ -118,6 +123,31 @@ class TestDothebayParseEventDiv(unittest.TestCase):
         self.assertEqual(event.duration, 4)
 
 
+class TestTicketingGetEvents(unittest.TestCase):
+    @patch('requests.get')
+    def test_get_events(self, mock_get: MagicMock) -> None:
+        mock_get().content = TICKETING_SAMPLE_EVENT_DATA
+        events = oraclepark.ticketing_get_events()
+        self.assertEqual(len(events), 1)
+        event = events[0]
+        self.assertEqual(event.id, 'athletics-at-giants2024-03-26T17:05:00')
+        self.assertEqual(event.title, 'Athletics at Giants')
+        self.assertEqual(event.slug, 'athletics-at-giants')
+        self.assertEqual(
+            event.subtitle,
+            'Local TV: NBCS BA ----- Local Radio: KNBR 680',
+        )
+        self.assertEqual(event.date, datetime.datetime(2024, 3, 26, 17, 5))
+        self.assertEqual(event.date_string, '2024-03-26T17:05:00')
+        self.assertEqual(event.location_name, 'Oracle Park - San Francisco')
+        self.assertEqual(event.location_type, '')
+        self.assertEqual(event.ticket_required, True)
+        self.assertEqual(event.ticket_available, True)
+        self.assertEqual(event.ticket_sold_out, False)
+        self.assertEqual(event.hide_road_game, False)
+        self.assertEqual(event.duration, 3)
+
+
 class TestGetEvents(unittest.TestCase):
     def setUp(self) -> None:
         self.mock_file = tempfile.NamedTemporaryFile()
@@ -128,7 +158,11 @@ class TestGetEvents(unittest.TestCase):
     @patch('requests.get')
     @patch('app.cache.get_cache_file')
     def test_get(self, mock_file: MagicMock, mock_get: MagicMock) -> None:
-        mock_get().content = DOTHEBAY_SAMPLE_EVENT_DATA
+        response1 = MagicMock()
+        response1.content = DOTHEBAY_SAMPLE_EVENT_DATA
+        response2 = MagicMock()
+        response2.content = TICKETING_SAMPLE_EVENT_DATA
+        mock_get.side_effect = [response1, response1, response2]
         mock_file.return_value = Path(self.mock_file.name)
         events = oraclepark.get_events()
         self.assertGreater(len(events), 0)
