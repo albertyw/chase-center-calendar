@@ -1,3 +1,4 @@
+import copy
 import csv
 import datetime
 from typing import List
@@ -103,6 +104,29 @@ def ticketing_get_events() -> List[Event]:
     return events
 
 
+def deduplicate_events(
+    ticketing_events: List[Event],
+    dothebay_events: List[Event],
+) -> List[Event]:
+    events: List[Event] = copy.copy(ticketing_events)
+    for dothebay_event in dothebay_events:
+        for ticketing_event in ticketing_events:
+            if ticketing_event.date.year != dothebay_event.date.year:
+                events.append(dothebay_event)
+                break
+            if ticketing_event.date.month != dothebay_event.date.month:
+                events.append(dothebay_event)
+                break
+            if ticketing_event.date.day != dothebay_event.date.day:
+                events.append(dothebay_event)
+                break
+            other = ticketing_event.title.split(' at ')[0]
+            if other not in dothebay_event.title:
+                events.append(dothebay_event)
+                break
+    return events
+
+
 def get_events() -> List[Event]:
     events = cache.read_cache(cache.CACHED_ORACLEPARK)
     if events:
@@ -118,5 +142,6 @@ def get_events() -> List[Event]:
             events.append(event)
             event_ids.append(event.id)
     ticketing_events = ticketing_get_events()
+    events = deduplicate_events(ticketing_events, events)
     cache.save_cache(cache.CACHED_ORACLEPARK, events)
     return events
