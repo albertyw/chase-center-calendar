@@ -1,12 +1,13 @@
 import datetime
 from pathlib import Path
 import tempfile
+from typing import Optional
 import unittest
 from unittest.mock import MagicMock, patch
 
 from bs4 import BeautifulSoup
 
-from app import oraclepark
+from app import event, oraclepark
 
 
 DOTHEBAY_SAMPLE_EVENT_DATA = """<div class="ds-events-group">
@@ -146,6 +147,47 @@ class TestTicketingGetEvents(unittest.TestCase):
         self.assertEqual(event.ticket_sold_out, False)
         self.assertEqual(event.hide_road_game, False)
         self.assertEqual(event.duration, 3)
+
+
+class TestDeduplicateEvents(unittest.TestCase):
+    def test_deduplicate_events(self) -> None:
+        def generate_event(
+            title: Optional[str] = None,
+            date: Optional[datetime.datetime] = None,
+        ) -> event.Event:
+            e = event.Event()
+            if title:
+                e.title = title
+            else:
+                e.title = 'Yankees at Giants'
+            if date:
+                e.date = date
+            else:
+                e.date = datetime.datetime(2024, 3, 14, 22, 38, 0)
+            return e
+
+        ticketing_events = [
+            generate_event(),
+        ]
+        dothebay_events = [
+            generate_event(),
+            generate_event(title='asdf'),
+            generate_event(title='Yankees vs. Giants'),
+            generate_event(date=datetime.datetime(2024, 3, 14, 8, 38, 0)),
+            generate_event(date=datetime.datetime(2024, 3, 15, 22, 38, 0)),
+            generate_event(date=datetime.datetime(2024, 4, 14, 22, 38, 0)),
+            generate_event(date=datetime.datetime(2025, 3, 14, 22, 38, 0)),
+        ]
+        events = oraclepark.deduplicate_events(ticketing_events, dothebay_events)
+        self.assertIn(ticketing_events[0], events)
+        self.assertNotIn(dothebay_events[0], events)
+        self.assertIn(dothebay_events[1], events)
+        self.assertNotIn(dothebay_events[2], events)
+        self.assertNotIn(dothebay_events[3], events)
+        self.assertIn(dothebay_events[4], events)
+        self.assertIn(dothebay_events[5], events)
+        self.assertIn(dothebay_events[6], events)
+        self.assertEqual(len(events), 5)
 
 
 class TestGetEvents(unittest.TestCase):
