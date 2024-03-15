@@ -130,23 +130,26 @@ class TestTicketingGetEvents(unittest.TestCase):
         mock_get().content = TICKETING_SAMPLE_EVENT_DATA
         events = oraclepark.ticketing_get_events()
         self.assertEqual(len(events), 1)
-        event = events[0]
-        self.assertEqual(event.id, 'athletics-at-giants2024-03-26T17:05:00')
-        self.assertEqual(event.title, 'Athletics at Giants')
-        self.assertEqual(event.slug, 'athletics-at-giants')
+        e = events[0]
+        self.assertEqual(e.id, 'athletics-at-giants2024-03-26T17:05:00-07:00')
+        self.assertEqual(e.title, 'Athletics at Giants')
+        self.assertEqual(e.slug, 'athletics-at-giants')
         self.assertEqual(
-            event.subtitle,
+            e.subtitle,
             'Local TV: NBCS BA ----- Local Radio: KNBR 680',
         )
-        self.assertEqual(event.date, datetime.datetime(2024, 3, 26, 17, 5))
-        self.assertEqual(event.date_string, '2024-03-26T17:05:00')
-        self.assertEqual(event.location_name, 'Oracle Park - San Francisco')
-        self.assertEqual(event.location_type, '')
-        self.assertEqual(event.ticket_required, True)
-        self.assertEqual(event.ticket_available, True)
-        self.assertEqual(event.ticket_sold_out, False)
-        self.assertEqual(event.hide_road_game, False)
-        self.assertEqual(event.duration, 3)
+        self.assertEqual(
+            e.date,
+            datetime.datetime(2024, 3, 26, 17, 5, tzinfo=event.TIMEZONE),
+        )
+        self.assertEqual(e.date_string, '2024-03-26T17:05:00-07:00')
+        self.assertEqual(e.location_name, 'Oracle Park - San Francisco')
+        self.assertEqual(e.location_type, '')
+        self.assertEqual(e.ticket_required, True)
+        self.assertEqual(e.ticket_available, True)
+        self.assertEqual(e.ticket_sold_out, False)
+        self.assertEqual(e.hide_road_game, False)
+        self.assertEqual(e.duration, 3)
 
 
 class TestDeduplicateEvents(unittest.TestCase):

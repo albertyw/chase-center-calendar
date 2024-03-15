@@ -88,7 +88,7 @@ def ticketing_get_events() -> List[Event]:
         start_time = dateutilparser.parse(row['START DATE'] + ' ' + row['START TIME'])
         end_time = dateutilparser.parse(row['END DATE'] + ' ' + row['END TIME'])
         duration = round((end_time - start_time).seconds / 60 / 60)
-        event.date = start_time
+        event.date = start_time.replace(tzinfo=TIMEZONE)
         event.date_string = event.date.isoformat()
         event.id = event.slug + event.date_string
         event.location_name = row['LOCATION']
