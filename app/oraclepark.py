@@ -14,6 +14,19 @@ URLS = [
     "https://dothebay.com/venues/oracle-park/events",
     "https://dothebay.com/venues/oracle-park/past_events",
 ]
+URL = (
+    "https://www.ticketing-client.com/ticketing-client/csv/GameTicketPromotionPrice.tiksrv?"
+    "team_id=137&"
+    "home_team_id=137&"
+    "display_in=singlegame&"
+    "ticket_category=Tickets&"
+    "site_section=Default&"
+    "sub_category=Default&"
+    "leave_empty_games=true&"
+    "event_type=T&"
+    "year=%s&"
+    "begin_date=%s0101"
+)
 
 
 def get_raw_events(url: str) -> List[BeautifulSoup]:
