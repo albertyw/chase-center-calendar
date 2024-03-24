@@ -7,7 +7,6 @@ from bs4 import BeautifulSoup
 from dateutil import parser as dateutilparser
 import requests
 from slugify import slugify
-from varsnap import varsnap
 
 from app import cache
 from app.event import Event, TIMEZONE
@@ -39,7 +38,8 @@ def dothebay_get_raw_events(url: str) -> List[BeautifulSoup]:
     return event_divs
 
 
-@varsnap
+# @varsnap
+# Possible infinite recursion, so remove varsnap
 def dothebay_parse_event_div(event_div: BeautifulSoup) -> Event:
     event = Event()
     event.title = event_div.find_all(
