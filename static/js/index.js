@@ -1,10 +1,14 @@
-var thirdParty = require('./thirdparty.js');
-thirdParty.setupRollbar();
-thirdParty.setupLogfit();
-thirdParty.setupVarsnap();
-thirdParty.setupGoogleAnalytics();
-require('./global.js');
+import 'normalize.css/normalize.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.js';
 
-var calculateFibonacci = require('./fibonacci.js');
+import { setupRollbar, setupLogfit, setupVarsnap, setupGoogleAnalytics } from './thirdparty.js';
+setupRollbar();
+setupLogfit();
+setupVarsnap();
+setupGoogleAnalytics();
+import './global.js';
+
+import calculateFibonacci from './fibonacci.js';
 var random = Math.floor(Math.random() * 20);
 console.log(calculateFibonacci(random));
