@@ -23,7 +23,7 @@ EXAMPLE_RAW_EVENT: chasecenter.RawEvent = {
         "ticketSoldOut": False,
         "hideRoadGame": None,
         "duration": 3,
-    }
+    },
 }
 
 
@@ -111,7 +111,7 @@ class TestGetEvents(TestCase):
     def test_get_events(
         self,
         mock_file: MagicMock,
-        mock_get_raw_events: MagicMock
+        mock_get_raw_events: MagicMock,
     ) -> None:
         mock_get_raw_events.return_value = [EXAMPLE_RAW_EVENT]
         mock_file.return_value = Path(self.mock_file.name)
@@ -131,7 +131,7 @@ class TestGetEvents(TestCase):
     def test_get_cached_events(
         self,
         mock_file: MagicMock,
-        mock_get_raw_events: MagicMock
+        mock_get_raw_events: MagicMock,
     ) -> None:
         mock_file.return_value = Path(self.mock_file.name)
         event = chasecenter.initialize_chase_event(EXAMPLE_RAW_EVENT)
@@ -146,7 +146,7 @@ class TestGetEvents(TestCase):
     def test_caches_events(
         self,
         mock_file: MagicMock,
-        mock_get_raw_events: MagicMock
+        mock_get_raw_events: MagicMock,
     ) -> None:
         mock_file.return_value = Path(self.mock_file.name)
         mock_get_raw_events.return_value = [EXAMPLE_RAW_EVENT]

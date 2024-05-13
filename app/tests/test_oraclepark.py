@@ -155,12 +155,12 @@ class TestTicketingGetEvents(unittest.TestCase):
 class TestDeduplicateEvents(unittest.TestCase):
     def test_deduplicate_events(self) -> None:
         def generate_event(
-            id: str,
+            event_id: str,
             title: Optional[str] = None,
             date: Optional[datetime.datetime] = None,
         ) -> event.Event:
             e = event.Event()
-            e.id = id
+            e.id = event_id
             if title:
                 e.title = title
             else:
