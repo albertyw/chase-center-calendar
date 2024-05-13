@@ -24,12 +24,6 @@ if [ -n "$DEPLOY_BRANCH" ]; then
     git pull
 fi
 
-if test -f forward; then
-    sudo cp "$HOME/chase-center-calendar/config/nginx/app-forward" "/etc/nginx/sites-enabled/chase-center-calendar-app"
-    docker exec nginx /etc/init.d/nginx reload
-    exit
-fi
-
 # Build container and network
 docker build --pull -t "$CONTAINER:$BRANCH" .
 docker network inspect "$NETWORK" &>/dev/null ||
