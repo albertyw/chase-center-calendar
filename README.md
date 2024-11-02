@@ -11,10 +11,14 @@ Google Calendar, Apple Calendar, and many other calendar apps
 Development
 -----------
 
-### Setup (using [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/)):
+### Setup
+Using [python venv](https://docs.python.org/3/library/venv.html) and
+[direnv](https://github.com/direnv/direnv)
 
 ```bash
-mkvirtualenv app -p python3.12
+python3.13 -m venv env
+printf "source env/bin/activate\nunset PS1\n" > .envrc
+direnv allow
 pip install -e .[test]
 ln -s .env.development .env
 npm install
