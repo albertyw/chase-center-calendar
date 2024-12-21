@@ -24,8 +24,9 @@ steps:
       CC_TEST_REPORTER_ID: 2fd1548c4a64215b1a8790e4cf423b329dda550bcf437b5e5835c16fd0da332b
 
   - name: Test Node
-    image: satantime/puppeteer-node:22-bookworm-slim
+    image: satantime/puppeteer-node:23-bookworm-slim
     commands:
+      - apt-get update && apt-get install -y xz-utils  # Remove when https://github.com/satanTime/puppeteer-node/issues/26 is resolved
       - ln -fs .env.development .env
       - npm ci
       - npm test
@@ -42,9 +43,8 @@ steps:
       - hadolint Dockerfile --ignore=DL3008 --ignore=SC2046 --ignore=SC2006
 
   - name: Test Nginx
-    image: python:3.12-alpine
+    image: albertyw/gixy:0.2.2
     commands:
-      - pip install gixy==0.1.21
       - gixy config/nginx/*
 
   - name: Build Docker Container
