@@ -24,13 +24,7 @@ class Event():
         self.ticket_required: bool = False
         self.ticket_available: bool = False
         self.ticket_sold_out: bool = False
-        self.hide_road_game: bool = False
         self.duration: int = 60
-
-    @property
-    @varsnap
-    def show(self) -> bool:
-        return not self.hide_road_game
 
     @property
     @varsnap

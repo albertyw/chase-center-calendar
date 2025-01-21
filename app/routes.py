@@ -21,7 +21,7 @@ def chase_center() -> str:
     cached_page = cache.read_raw_cache(cache.CACHED_CHASECENTER_HTML)
     if not cached_page:
         events = chasecenter.get_events()
-        events = [e for e in events if e.show and e.is_future]
+        events = [e for e in events if e.is_future]
         page = render_template("chase_center.htm", events=events)
         cache.save_raw_cache(cache.CACHED_CHASECENTER_HTML, page)
     else:
@@ -49,7 +49,7 @@ def oracle_park() -> str:
     cached_page = cache.read_raw_cache(cache.CACHED_ORACLEPARK_HTML)
     if not cached_page:
         events = oraclepark.get_events()
-        events = [e for e in events if e.show and e.is_future]
+        events = [e for e in events if e.is_future]
         page = render_template("oracle_park.htm", events=events)
         cache.save_raw_cache(cache.CACHED_ORACLEPARK_HTML, page)
     else:

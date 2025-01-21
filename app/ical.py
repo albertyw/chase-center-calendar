@@ -20,8 +20,6 @@ def generate_calendar(events: List[event.Event]) -> str:
     cal['x-published-ttl'] = 'PT1H'
     cal['refresh-interval'] = 'VALUE=DURATION:PT1H'
     for e in events:
-        if not e.show:
-            continue
         cal_event = generate_calendar_event(e)
         cal.add_component(cal_event)
     return str(cal.to_ical().decode('utf-8'))

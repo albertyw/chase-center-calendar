@@ -31,12 +31,6 @@ class TestEvent(TestCase):
         self.assertEqual(event.date, expected)
         self.assertEqual(event.location_name, data['location'])
 
-    def test_show(self) -> None:
-        event = chasecenter.initialize_chase_event(EXAMPLE_RAW_EVENT)
-        self.assertTrue(event.show)
-        event.hide_road_game = True
-        self.assertFalse(event.show)
-
     def test_is_future(self) -> None:
         event = chasecenter.initialize_chase_event(EXAMPLE_RAW_EVENT)
         event.date = datetime(3000, 1, 1, tzinfo=TIMEZONE)

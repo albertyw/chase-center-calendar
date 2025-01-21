@@ -120,7 +120,6 @@ class TestDothebayParseEventDiv(unittest.TestCase):
         self.assertEqual(event.ticket_required, True)
         self.assertEqual(event.ticket_available, True)
         self.assertEqual(event.ticket_sold_out, False)
-        self.assertEqual(event.hide_road_game, False)
         self.assertEqual(event.duration, 4)
 
 
@@ -148,7 +147,6 @@ class TestTicketingGetEvents(unittest.TestCase):
         self.assertEqual(e.ticket_required, True)
         self.assertEqual(e.ticket_available, True)
         self.assertEqual(e.ticket_sold_out, False)
-        self.assertEqual(e.hide_road_game, False)
         self.assertEqual(e.duration, 3)
 
 
