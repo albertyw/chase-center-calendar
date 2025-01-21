@@ -66,7 +66,13 @@ class TestGetRawEvents(TestCase):
 
     @patch('requests.post')
     def test_get_events_mock(self, mock_post: MagicMock) -> None:
-        raw_event = {'results': {chasecenter.CLIENT_REQUEST_ID: {'docs': [EXAMPLE_RAW_EVENT]}}}
+        raw_event = {
+            'results': {
+                chasecenter.CLIENT_REQUEST_ID: {
+                    'docs': [EXAMPLE_RAW_EVENT],
+                },
+            },
+        }
         mock_post().json.return_value = raw_event
         events = chasecenter.get_raw_events()
         self.assertGreater(len(events), 0)

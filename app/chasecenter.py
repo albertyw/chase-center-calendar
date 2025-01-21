@@ -12,8 +12,7 @@ from app.event import Event, TIMEZONE
 
 
 FieldValues = Union[None, str, bool, int]
-RawEvent = Mapping[str, Mapping[str, FieldValues]]
-# RawQueryResponse = Mapping[str, Mapping[str, Mapping[str, List[RawEvent]]]]
+RawEvent = Mapping[str, FieldValues]
 RawQueryResponse = List[RawEvent]
 
 URL = "https://t6ky1u2if62shkupuk.us-central1.gcp.squid.cloud/query/batchQueries"
