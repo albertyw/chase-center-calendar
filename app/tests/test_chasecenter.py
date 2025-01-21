@@ -10,41 +10,25 @@ from app.event import TIMEZONE
 
 
 EXAMPLE_RAW_EVENT: chasecenter.RawEvent = {
-    "fields": {
-        "id": "example id",
-        "slug": None,
-        "title": "Tame Impala",
-        "subtitle": "example subtitle",
-        "date": "2020-09-15T19:30",
-        "locationName": "Chase Center, San Francisco",
-        "locationType": "arena",
-        "ticketRequired": True,
-        "ticketAvailable": True,
-        "ticketSoldOut": False,
-        "hideRoadGame": None,
-        "duration": 3,
-    },
+    "uid": "example id",
+    "title": "Tame Impala",
+    "metaTitle": "example subtitle",
+    "datetime": "2025-01-23T03:00:00Z",
+    "location": "Chase Center, San Francisco",
 }
 
 
 class TestEvent(TestCase):
     def test_init(self) -> None:
         event = chasecenter.initialize_chase_event(EXAMPLE_RAW_EVENT)
-        data = EXAMPLE_RAW_EVENT['fields']
-        self.assertEqual(event.id, data['id'])
-        self.assertEqual(event.slug, data['slug'])
+        data = EXAMPLE_RAW_EVENT
+        self.assertEqual(event.id, data['uid'])
         self.assertEqual(event.title, data['title'])
-        self.assertEqual(event.subtitle, data['subtitle'])
-        self.assertEqual(event.date_string, data['date'])
-        expected = datetime(2020, 9, 15, 19, 30).replace(tzinfo=TIMEZONE)
+        self.assertEqual(event.subtitle, data['metaTitle'])
+        self.assertEqual(event.date_string, data['datetime'])
+        expected = datetime(2025, 1, 22, 19, 0).replace(tzinfo=TIMEZONE)
         self.assertEqual(event.date, expected)
-        self.assertEqual(event.location_name, data['locationName'])
-        self.assertEqual(event.location_type, data['locationType'])
-        self.assertEqual(event.ticket_required, data['ticketRequired'])
-        self.assertEqual(event.ticket_available, data['ticketAvailable'])
-        self.assertEqual(event.ticket_sold_out, data['ticketSoldOut'])
-        self.assertEqual(event.hide_road_game, False)
-        self.assertEqual(event.duration, data['duration'])
+        self.assertEqual(event.location_name, data['location'])
 
     def test_show(self) -> None:
         event = chasecenter.initialize_chase_event(EXAMPLE_RAW_EVENT)
@@ -61,7 +45,7 @@ class TestEvent(TestCase):
 
     def test_end(self) -> None:
         event = chasecenter.initialize_chase_event(EXAMPLE_RAW_EVENT)
-        expected = datetime(2020, 9, 15, 22, 30).replace(tzinfo=TIMEZONE)
+        expected = datetime(2025, 1, 22, 22,0).replace(tzinfo=TIMEZONE)
         self.assertEqual(event.end, expected)
 
 
@@ -81,7 +65,7 @@ class TestGetRawEvents(TestCase):
 
     @patch('requests.post')
     def test_get_events_mock(self, mock_post: MagicMock) -> None:
-        raw_event = {'data': {'contentByType': {'items': [EXAMPLE_RAW_EVENT]}}}
+        raw_event = {'results': {chasecenter.CLIENT_REQUEST_ID: {'docs': [EXAMPLE_RAW_EVENT]}}}
         mock_post().json.return_value = raw_event
         events = chasecenter.get_raw_events()
         self.assertGreater(len(events), 0)

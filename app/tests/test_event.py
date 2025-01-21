@@ -10,7 +10,7 @@ class TestEvent(TestCase):
         serialized = e.serialize()
         self.assertIn('San Francisco', serialized['location_name'])
         self.assertIn('Impala', serialized['title'])
-        self.assertIn('2020-09-15T19:30:00-07:00', serialized['date'])
+        self.assertIn('2025-01-22T19:00:00-08:00', serialized['date'])
 
     def test_deserialize(self) -> None:
         e = chasecenter.initialize_chase_event(EXAMPLE_RAW_EVENT)
