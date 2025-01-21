@@ -1,6 +1,7 @@
 from datetime import datetime
 import json
 from pathlib import Path
+import requests
 import tempfile
 from unittest import TestCase, skip
 from unittest.mock import MagicMock, patch
@@ -69,6 +70,12 @@ class TestGetRawEvents(TestCase):
         mock_post().json.return_value = raw_event
         events = chasecenter.get_raw_events()
         self.assertGreater(len(events), 0)
+
+    @patch('requests.post')
+    def test_get_events_http_error(self, mock_post: MagicMock) -> None:
+        mock_post().raise_for_status.side_effect = requests.HTTPError()
+        events = chasecenter.get_raw_events()
+        self.assertEqual(len(events), 0)
 
     @patch('requests.post')
     def test_get_events_no_json(self, mock_post: MagicMock) -> None:

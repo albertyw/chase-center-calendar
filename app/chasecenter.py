@@ -69,14 +69,19 @@ def get_raw_events() -> RawQueryResponse:
     data = json.dumps(QUERY)
     response = requests.post(URL, headers=HEADERS, data=data)
     try:
+        response.raise_for_status()
+    except requests.HTTPError:
+        rollbar.report_message('Chasecenter HTTP error', 'error')
+        return []
+    try:
         raw_response = response.json()
     except json.JSONDecodeError:
-        rollbar.report_message('Cannot parse chasecenter json', 'warning')
+        rollbar.report_message('Cannot parse chasecenter json', 'error')
         return []
     try:
         raw_query_response = raw_response['results'][CLIENT_REQUEST_ID]['docs']
     except KeyError:
-        rollbar.report_message('Received corrupt chasecenter json', 'warning')
+        rollbar.report_message('Received corrupt chasecenter json', 'error')
         return []
     return cast(RawQueryResponse, raw_query_response)
 
