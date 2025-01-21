@@ -4,6 +4,7 @@ from typing import List, Mapping, Optional, Union, cast
 
 import requests
 import rollbar
+from slugify import slugify
 from varsnap import varsnap
 
 from app import cache
@@ -52,8 +53,8 @@ QUERY = [
 def initialize_chase_event(data: RawEvent) -> Event:
     event = Event()
     event.id = cast(Optional[str], data['uid'])
-    event.slug = cast(Optional[str], data['title'])
     event.title = cast(str, data['title'])
+    event.slug = slugify(event.title)
     event.subtitle = cast(Optional[str], data['metaTitle'])
     event.date_string = cast(str, data['datetime'])
     date = datetime.datetime.fromisoformat(event.date_string)
