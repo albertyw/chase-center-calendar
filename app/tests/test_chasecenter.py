@@ -112,9 +112,6 @@ class TestGetEvents(TestCase):
         self.assertTrue(isinstance(event.title, str))
         self.assertTrue(isinstance(event.date_string, str))
         self.assertTrue(isinstance(event.date, datetime))
-        self.assertTrue(isinstance(event.ticket_required, bool))
-        self.assertTrue(isinstance(event.ticket_available, bool))
-        self.assertTrue(isinstance(event.ticket_sold_out, bool))
         self.assertTrue(isinstance(event.duration, int))
 
     @patch('app.chasecenter.get_raw_events')

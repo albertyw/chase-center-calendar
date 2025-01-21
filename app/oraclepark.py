@@ -66,9 +66,6 @@ def dothebay_parse_event_div(event_div: BeautifulSoup) -> Event:
         attrs={'itemprop': 'name'},
     )[0].get_text()
     event.location_type = ''
-    event.ticket_required = True
-    event.ticket_available = True
-    event.ticket_sold_out = False
     event.duration = 4
     return event
 
@@ -92,9 +89,6 @@ def ticketing_get_events() -> List[Event]:
         event.id = event.slug + event.date_string
         event.location_name = row['LOCATION']
         event.location_type = ''
-        event.ticket_required = True
-        event.ticket_available = True
-        event.ticket_sold_out = False
         event.duration = duration
         if 'Oracle Park' not in event.location_name:
             continue

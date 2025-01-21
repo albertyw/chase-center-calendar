@@ -117,9 +117,6 @@ class TestDothebayParseEventDiv(unittest.TestCase):
         self.assertEqual(event.date_string, '2021-10-13T20:33:00-07:00')
         self.assertEqual(event.location_name, 'Oracle Park')
         self.assertEqual(event.location_type, '')
-        self.assertEqual(event.ticket_required, True)
-        self.assertEqual(event.ticket_available, True)
-        self.assertEqual(event.ticket_sold_out, False)
         self.assertEqual(event.duration, 4)
 
 
@@ -144,9 +141,6 @@ class TestTicketingGetEvents(unittest.TestCase):
         self.assertEqual(e.date_string, '2024-03-26T17:05:00-07:00')
         self.assertEqual(e.location_name, 'Oracle Park - San Francisco')
         self.assertEqual(e.location_type, '')
-        self.assertEqual(e.ticket_required, True)
-        self.assertEqual(e.ticket_available, True)
-        self.assertEqual(e.ticket_sold_out, False)
         self.assertEqual(e.duration, 3)
 
 
