@@ -12,7 +12,7 @@ dependencies = [
     "beautifulsoup4==4.12.3",                     # HTML Parser
     "flask-sitemap==0.4.0",                       # Web sitemaps
     "icalendar==6.1.1",                           # iCal generator
-    "python-dateutil==2.8.2",                     # Datetime manipulation
+    "python-dateutil==2.9.0.post0",               # Datetime manipulation
     "python-slugify==8.0.4",                      # Generate string slugs
 
     # Monitoring/tracking/logging
