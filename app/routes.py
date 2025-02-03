@@ -34,7 +34,7 @@ def ical_file() -> Response:
     cached_cal = cache.read_raw_cache(cache.CACHED_CHASECENTER_ICS)
     if not cached_cal:
         events = chasecenter.get_events()
-        cal = ical.generate_calendar(events)
+        cal = ical.generate_calendar(events, 'Chase Center')
         cache.save_raw_cache(cache.CACHED_CHASECENTER_ICS, cal)
     else:
         cal = cached_cal
@@ -62,7 +62,7 @@ def oracle_park_ics_file() -> Response:
     cached_cal = cache.read_raw_cache(cache.CACHED_ORACLEPARK_ICS)
     if not cached_cal:
         events = oraclepark.get_events()
-        cal = ical.generate_calendar(events)
+        cal = ical.generate_calendar(events, 'Oracle Park')
         cache.save_raw_cache(cache.CACHED_ORACLEPARK_ICS, cal)
     else:
         cal = cached_cal

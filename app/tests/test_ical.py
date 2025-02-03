@@ -13,7 +13,7 @@ TZ = ZoneInfo('America/Los_Angeles')
 
 class TestGenerateCalendar(TestCase):
     def test_generate_empty(self) -> None:
-        cal = ical.generate_calendar([])
+        cal = ical.generate_calendar([], 'Chase Center')
         self.assertIn('Chase Center Events', cal)
         self.assertIn('BEGIN:VCALENDAR', cal)
         self.assertIn('END:VCALENDAR', cal)
@@ -21,7 +21,7 @@ class TestGenerateCalendar(TestCase):
     @patch('datetime.datetime')
     def test_generate(self, mock_now) -> None:
         mock_now.now.return_value = datetime(2025, 2, 2, 17, 48, tzinfo=TZ)
-        cal = ical.generate_calendar([EXAMPLE_EVENT])
+        cal = ical.generate_calendar([EXAMPLE_EVENT], 'Chase Center')
         self.assertIn('DTSTART:20250123T030000Z', cal)
         self.assertIn('DTEND:20250123T060000Z', cal)
         self.assertIn('SUMMARY:Tame Impala', cal)

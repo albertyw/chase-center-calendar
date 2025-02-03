@@ -9,14 +9,14 @@ from app import event
 
 # datetime.now() is not deterministic, so cannot use varsnap
 # @varsnap
-def generate_calendar(events: List[event.Event]) -> str:
+def generate_calendar(events: List[event.Event], location: str) -> str:
     modified = datetime.datetime.now()
     cal = Calendar()
-    cal['summary'] = 'Chase Center Events'
+    cal['summary'] = '%s Events' % location
     cal['version'] = '2.0'
-    cal['prodid'] = '-//Albertyw.com//Chase Center Calendar//EN'
-    cal['x-wr-calname'] = 'Chase Center Events'
-    cal['x-wr-caldesc'] = 'Events at the SF Chase Center'
+    cal['prodid'] = '-//ChaseCenterCalendar.com//%s Calendar//EN' % location
+    cal['x-wr-calname'] = '%s Events' % location
+    cal['x-wr-caldesc'] = 'Events at the SF %s' % location
     cal['timezone'] = 'America/Los_Angeles'
     cal['x-wr-timezone'] = 'America/Los_Angeles'
     cal['x-published-ttl'] = 'PT1H'
