@@ -34,12 +34,15 @@ def generate_calendar_event(event: event.Event) -> Event:
     cal_event['location'] = event.location_name
     cal_event['summary'] = event.title
     cal_event['description'] = event.subtitle
+    cal_event['sequence'] = int(datetime.datetime.now().timestamp())
+    cal_event['last-modified'] = date_string(datetime.datetime.now())
     return cal_event
 
 
 @varsnap
 def date_string(dt: datetime.datetime) -> str:
     utc = dt.astimezone(datetime.timezone.utc).replace(tzinfo=None)
+    utc = utc.replace(microsecond=0)
     formatted = utc.isoformat()
     formatted = formatted.replace('-', '')
     formatted = formatted.replace(':', '')

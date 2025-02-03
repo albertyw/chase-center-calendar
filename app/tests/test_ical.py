@@ -23,6 +23,9 @@ class TestGenerateCalendar(TestCase):
         self.assertIn('SUMMARY:Tame Impala', cal)
         self.assertIn('DESCRIPTION:example subtitle', cal)
         self.assertIn('LOCATION:Chase Center\\, San Francisco', cal)
+        # https://stackoverflow.com/questions/60560457/google-doesnt-sync-my-subscribed-ics-feed
+        self.assertIn('SEQUENCE:', cal)
+        self.assertIn('LAST-MODIFIED:', cal)
 
 
 class TestDateString(TestCase):
