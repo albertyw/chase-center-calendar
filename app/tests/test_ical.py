@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 from unittest import TestCase
+from unittest.mock import patch
 from zoneinfo import ZoneInfo
 
 from app import chasecenter, ical
@@ -7,6 +8,7 @@ from app.tests.test_chasecenter import EXAMPLE_RAW_EVENT
 
 
 EXAMPLE_EVENT = chasecenter.initialize_chase_event(EXAMPLE_RAW_EVENT)
+TZ = ZoneInfo('America/Los_Angeles')
 
 
 class TestGenerateCalendar(TestCase):
@@ -16,7 +18,9 @@ class TestGenerateCalendar(TestCase):
         self.assertIn('BEGIN:VCALENDAR', cal)
         self.assertIn('END:VCALENDAR', cal)
 
-    def test_generate(self) -> None:
+    @patch('datetime.datetime')
+    def test_generate(self, mock_now) -> None:
+        mock_now.now.return_value = datetime(2025, 2, 2, 17, 48, tzinfo=TZ)
         cal = ical.generate_calendar([EXAMPLE_EVENT])
         self.assertIn('DTSTART:20250123T030000Z', cal)
         self.assertIn('DTEND:20250123T060000Z', cal)
@@ -24,8 +28,8 @@ class TestGenerateCalendar(TestCase):
         self.assertIn('DESCRIPTION:example subtitle', cal)
         self.assertIn('LOCATION:Chase Center\\, San Francisco', cal)
         # https://stackoverflow.com/questions/60560457/google-doesnt-sync-my-subscribed-ics-feed
-        self.assertIn('SEQUENCE:', cal)
-        self.assertIn('LAST-MODIFIED:', cal)
+        self.assertIn('SEQUENCE:1738547280', cal)
+        self.assertIn('LAST-MODIFIED:20250203T014800Z', cal)
 
 
 class TestDateString(TestCase):
@@ -35,7 +39,6 @@ class TestDateString(TestCase):
         self.assertEqual(formatted, '19980118T073000Z')
 
     def test_tz_date_string(self) -> None:
-        tz = ZoneInfo('America/Los_Angeles')
-        dt = datetime(1998, 1, 17, 23, 30).replace(tzinfo=tz)
+        dt = datetime(1998, 1, 17, 23, 30).replace(tzinfo=TZ)
         formatted = ical.date_string(dt)
         self.assertEqual(formatted, '19980118T073000Z')
