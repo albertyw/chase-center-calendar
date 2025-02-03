@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 from unittest import TestCase
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 from zoneinfo import ZoneInfo
 
 from app import chasecenter, ical
@@ -19,7 +19,7 @@ class TestGenerateCalendar(TestCase):
         self.assertIn('END:VCALENDAR', cal)
 
     @patch('datetime.datetime')
-    def test_generate(self, mock_now) -> None:
+    def test_generate(self, mock_now: MagicMock) -> None:
         mock_now.now.return_value = datetime(2025, 2, 2, 17, 48, tzinfo=TZ)
         cal = ical.generate_calendar([EXAMPLE_EVENT], 'Chase Center')
         self.assertIn('DTSTART:20250123T030000Z', cal)
