@@ -30,15 +30,3 @@ class TestGenerateCalendar(TestCase):
         # https://stackoverflow.com/questions/60560457/google-doesnt-sync-my-subscribed-ics-feed
         self.assertIn('SEQUENCE:1738547280', cal)
         self.assertIn('LAST-MODIFIED;TZID=America/Los_Angeles:20250202T174800', cal)
-
-
-class TestDateString(TestCase):
-    def test_date_string(self) -> None:
-        dt = datetime(1998, 1, 18, 7, 30, tzinfo=timezone.utc)
-        formatted = ical.date_string(dt)
-        self.assertEqual(formatted, '19980118T073000Z')
-
-    def test_tz_date_string(self) -> None:
-        dt = datetime(1998, 1, 17, 23, 30).replace(tzinfo=TZ)
-        formatted = ical.date_string(dt)
-        self.assertEqual(formatted, '19980118T073000Z')

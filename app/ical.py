@@ -39,14 +39,3 @@ def generate_calendar_event(event: event.Event, modified: datetime.datetime) -> 
     cal_event['sequence'] = int(modified.timestamp())
     cal_event['last-modified'] = vDatetime(modified)
     return cal_event
-
-
-@varsnap
-def date_string(dt: datetime.datetime) -> str:
-    utc = dt.astimezone(datetime.timezone.utc).replace(tzinfo=None)
-    utc = utc.replace(microsecond=0)
-    formatted = utc.isoformat()
-    formatted = formatted.replace('-', '')
-    formatted = formatted.replace(':', '')
-    formatted += 'Z'
-    return formatted
