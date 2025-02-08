@@ -40,6 +40,7 @@ def ical_file() -> Response:
     else:
         cal = cached_cal
     response = make_response(cal)
+    response.mimetype = "text/calendar"
     response.headers["Content-Disposition"] = \
         "attachment; filename=chasecenter.ics"
     return response
@@ -68,6 +69,7 @@ def oracle_park_ics_file() -> Response:
     else:
         cal = cached_cal
     response = make_response(cal)
+    response.mimetype = "text/calendar"
     response.headers["Content-Disposition"] = \
         "attachment; filename=oraclepark.ics"
     return response
