@@ -19,3 +19,7 @@ class TestEvent(TestCase):
         self.assertEqual(e.id, deserialized.id)
         self.assertEqual(e.title, deserialized.title)
         self.assertEqual(e.date, deserialized.date)
+
+    def test_str(self) -> None:
+        e = chasecenter.initialize_chase_event(EXAMPLE_RAW_EVENT)
+        self.assertEqual(str(e), 'Tame Impala (2025-01-23T03:00:00Z)')

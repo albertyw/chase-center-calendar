@@ -23,6 +23,9 @@ class Event():
         self.location_type: Optional[str] = None
         self.duration: int = 60
 
+    def __str__(self) -> str:
+        return f'{self.title} ({self.date_string})'
+
     @property
     @varsnap
     def is_future(self) -> bool:
