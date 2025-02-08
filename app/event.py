@@ -26,6 +26,9 @@ class Event():
     def __str__(self) -> str:
         return f'{self.title} ({self.date_string})'
 
+    def __lt__(self, other: Event) -> bool:
+        return self.date < other.date
+
     @property
     @varsnap
     def is_future(self) -> bool:

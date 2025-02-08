@@ -1,3 +1,4 @@
+import datetime
 from unittest import TestCase
 
 from app.tests.test_chasecenter import EXAMPLE_RAW_EVENT
@@ -23,3 +24,10 @@ class TestEvent(TestCase):
     def test_str(self) -> None:
         e = chasecenter.initialize_chase_event(EXAMPLE_RAW_EVENT)
         self.assertEqual(str(e), 'Tame Impala (2025-01-23T03:00:00Z)')
+
+    def test_sort(self) -> None:
+        e1 = chasecenter.initialize_chase_event(EXAMPLE_RAW_EVENT)
+        e2 = chasecenter.initialize_chase_event(EXAMPLE_RAW_EVENT)
+        e2.date = e2.date + datetime.timedelta(days=1)
+        self.assertEqual(sorted([e1, e2]), [e1, e2])
+        self.assertEqual(sorted([e2, e1]), [e1, e2])
