@@ -22,14 +22,14 @@ class TestGenerateCalendar(TestCase):
     def test_generate(self, mock_now: MagicMock) -> None:
         mock_now.now.return_value = datetime(2025, 2, 2, 17, 48, tzinfo=TZ)
         cal = ical.generate_calendar([EXAMPLE_EVENT], 'Chase Center')
-        self.assertIn('DTSTART:20250123T030000Z', cal)
-        self.assertIn('DTEND:20250123T060000Z', cal)
+        self.assertIn('DTSTART;TZID=America/Los_Angeles:20250122T190000', cal)
+        self.assertIn('DTEND;TZID=America/Los_Angeles:20250122T220000', cal)
         self.assertIn('SUMMARY:Tame Impala', cal)
         self.assertIn('DESCRIPTION:example subtitle', cal)
         self.assertIn('LOCATION:Chase Center\\, San Francisco', cal)
         # https://stackoverflow.com/questions/60560457/google-doesnt-sync-my-subscribed-ics-feed
         self.assertIn('SEQUENCE:1738547280', cal)
-        self.assertIn('LAST-MODIFIED:20250203T014800Z', cal)
+        self.assertIn('LAST-MODIFIED;TZID=America/Los_Angeles:20250202T174800', cal)
 
 
 class TestDateString(TestCase):
