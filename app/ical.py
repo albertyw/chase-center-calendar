@@ -37,5 +37,6 @@ def generate_calendar_event(event: event.Event, modified: datetime.datetime) -> 
     cal_event['summary'] = event.title
     cal_event['description'] = event.subtitle
     cal_event['sequence'] = int(modified.timestamp())
+    cal_event['dtstamp'] = vDatetime(modified)
     cal_event['last-modified'] = vDatetime(modified)
     return cal_event

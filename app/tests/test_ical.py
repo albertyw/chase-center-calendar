@@ -29,4 +29,5 @@ class TestGenerateCalendar(TestCase):
         self.assertIn('LOCATION:Chase Center\\, San Francisco', cal)
         # https://stackoverflow.com/questions/60560457/google-doesnt-sync-my-subscribed-ics-feed
         self.assertIn('SEQUENCE:1738547280', cal)
+        self.assertIn('DTSTAMP;TZID=America/Los_Angeles:20250202T174800', cal)
         self.assertIn('LAST-MODIFIED;TZID=America/Los_Angeles:20250202T174800', cal)
