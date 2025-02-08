@@ -10,7 +10,7 @@ from app import event
 # datetime.now() is not deterministic, so cannot use varsnap
 # @varsnap
 def generate_calendar(events: List[event.Event], location: str) -> str:
-    modified = datetime.datetime.now()
+    modified = _get_modified()
     cal = Calendar()
     cal['summary'] = '%s Events' % location
     cal['version'] = '2.0'
@@ -31,8 +31,8 @@ def generate_calendar(events: List[event.Event], location: str) -> str:
 def generate_calendar_event(event: event.Event, modified: datetime.datetime) -> Event:
     cal_event = Event()
     cal_event['uid'] = event.id
-    cal_event['dtstart'] = vDatetime(event.date)
-    cal_event['dtend'] = vDatetime(event.end)
+    cal_event['dtstart'] = vDatetime(event.date.astimezone(datetime.timezone.utc))
+    cal_event['dtend'] = vDatetime(event.end.astimezone(datetime.timezone.utc))
     cal_event['location'] = event.location_name
     cal_event['summary'] = event.title
     cal_event['description'] = event.subtitle
@@ -40,3 +40,7 @@ def generate_calendar_event(event: event.Event, modified: datetime.datetime) -> 
     cal_event['dtstamp'] = vDatetime(modified)
     cal_event['last-modified'] = vDatetime(modified)
     return cal_event
+
+
+def _get_modified() -> datetime.datetime:
+    return datetime.datetime.now(datetime.timezone.utc)
