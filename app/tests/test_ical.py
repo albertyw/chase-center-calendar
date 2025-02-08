@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 from zoneinfo import ZoneInfo
