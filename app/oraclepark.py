@@ -137,5 +137,6 @@ def get_events() -> List[Event]:
             events.append(event)
     ticketing_events = ticketing_get_events()
     events = deduplicate_events(ticketing_events, events)
+    events.sort()
     cache.save_cache(cache.CACHED_ORACLEPARK, events)
     return events
