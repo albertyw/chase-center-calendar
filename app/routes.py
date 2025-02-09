@@ -30,7 +30,6 @@ def chase_center() -> str:
 
 
 @handlers.route("/chasecenter.ics")
-@handlers.route("/chasecenter2.ics")
 def ical_file() -> Response:
     cached_cal = cache.read_raw_cache(cache.CACHED_CHASECENTER_ICS)
     if not cached_cal:
