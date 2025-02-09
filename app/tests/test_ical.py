@@ -11,7 +11,8 @@ EXAMPLE_EVENT = chasecenter.initialize_chase_event(EXAMPLE_RAW_EVENT)
 
 class TestGenerateCalendar(TestCase):
     def test_generate_empty(self) -> None:
-        cal = ical.generate_calendar([], 'Chase Center')
+        cal_bytes = ical.generate_calendar([], 'Chase Center')
+        cal = cal_bytes.decode("utf-8")
         self.assertIn('Chase Center Events', cal)
         self.assertIn('BEGIN:VCALENDAR', cal)
         self.assertIn('END:VCALENDAR', cal)
@@ -19,7 +20,8 @@ class TestGenerateCalendar(TestCase):
     @patch('app.ical._get_modified')
     def test_generate(self, mock_modified: MagicMock) -> None:
         mock_modified.return_value = datetime(2025, 2, 2, 17, 48, tzinfo=timezone.utc)
-        cal = ical.generate_calendar([EXAMPLE_EVENT], 'Chase Center')
+        cal_bytes = ical.generate_calendar([EXAMPLE_EVENT], 'Chase Center')
+        cal = cal_bytes.decode("utf-8")
         self.assertIn('DTSTART:20250123T030000Z', cal)
         self.assertIn('DTEND:20250123T060000Z', cal)
         self.assertIn('SUMMARY:Tame Impala', cal)

@@ -1,5 +1,5 @@
 import datetime
-from typing import List
+from typing import List, cast
 
 from icalendar import Calendar, Event, vDatetime
 from varsnap import varsnap
@@ -9,7 +9,7 @@ from app import event
 
 # datetime.now() is not deterministic, so cannot use varsnap
 # @varsnap
-def generate_calendar(events: List[event.Event], location: str) -> str:
+def generate_calendar(events: List[event.Event], location: str) -> bytes:
     modified = _get_modified()
     cal = Calendar()
     cal['summary'] = '%s Events' % location
@@ -24,7 +24,7 @@ def generate_calendar(events: List[event.Event], location: str) -> str:
     for e in events:
         cal_event = generate_calendar_event(e, modified)
         cal.add_component(cal_event)
-    return str(cal.to_ical().decode('utf-8'))
+    return cast(bytes, cal.to_ical())
 
 
 @varsnap
