@@ -91,3 +91,7 @@ ENV/
 
 node_modules
 .coverage_js
+
+# other IDE/tooling
+.idea/
+.tool-versions
