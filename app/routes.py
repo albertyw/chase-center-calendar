@@ -1,5 +1,3 @@
-import io
-
 from flask import Blueprint, Response, render_template, send_file
 from varsnap import varsnap
 
@@ -33,10 +31,17 @@ def chase_center() -> bytes:
 
 @handlers.route("/chasecenter.ics")
 def ical_file() -> Response:
-    events = chasecenter.get_events()
-    cal = ical.generate_calendar(events, 'Chase Center')
-    return send_file(io.BytesIO(cal), mimetype="text/calendar",
-                     as_attachment=True, download_name="chasecenter.ics")
+    cached_file = cache.read_raw_cache(cache.CACHED_CHASECENTER_ICS)
+    if not cached_file:
+        events = chasecenter.get_events()
+        cal = ical.generate_calendar(events, 'Chase Center')
+        cache.save_raw_cache(cache.CACHED_CHASECENTER_ICS, cal)
+    return send_file(
+        cache.get_cache_file(cache.CACHED_CHASECENTER_ICS),
+        mimetype="text/calendar",
+        as_attachment=True,
+        download_name="chasecenter.ics",
+    )
 
 
 @handlers.route("/oracle_park")
@@ -54,10 +59,13 @@ def oracle_park() -> bytes:
 
 @handlers.route("/oraclepark.ics")
 def oracle_park_ics_file() -> Response:
-    events = oraclepark.get_events()
-    cal = ical.generate_calendar(events, 'Oracle Park')
+    cached_file = cache.read_raw_cache(cache.CACHED_ORACLEPARK_ICS)
+    if not cached_file:
+        events = oraclepark.get_events()
+        cal = ical.generate_calendar(events, 'Oracle Park')
+        cache.save_raw_cache(cache.CACHED_ORACLEPARK_ICS, cal)
     return send_file(
-        io.BytesIO(cal),
+        cache.get_cache_file(cache.CACHED_ORACLEPARK_ICS),
         mimetype="text/calendar",
         as_attachment=True,
         download_name="oraclepark.ics",
