@@ -21,20 +21,20 @@ def get_cache_file(name: str) -> Path:
     return file_path
 
 
-def read_raw_cache(name: str) -> Optional[str]:
+def read_raw_cache(name: str) -> Optional[bytes]:
     path = get_cache_file(name)
     if not path.is_file():
         return None
     if time.time() - os.path.getmtime(path) > CACHE_DURATION:
         return None
-    with open(path, 'r') as handle:
+    with open(path, 'rb') as handle:
         data = handle.read()
     return data
 
 
-def save_raw_cache(name: str, data: str) -> None:
+def save_raw_cache(name: str, data: bytes) -> None:
     path = get_cache_file(name)
-    with open(path, 'w') as handle:
+    with open(path, 'wb') as handle:
         handle.write(data)
 
 
@@ -53,4 +53,4 @@ def read_cache(name: str) -> Optional[List[Event]]:
 def save_cache(name: str, events: List[Event]) -> None:
     serialized_events = [e.serialize() for e in events]
     data = json.dumps(serialized_events)
-    save_raw_cache(name, data)
+    save_raw_cache(name, data.encode('utf-8'))

@@ -19,12 +19,12 @@ def ical_view() -> str:
 
 
 @handlers.route("/chase_center")
-def chase_center() -> str:
+def chase_center() -> bytes:
     cached_page = cache.read_raw_cache(cache.CACHED_CHASECENTER_HTML)
     if not cached_page:
         events = chasecenter.get_events()
         events = [e for e in events if e.is_future]
-        page = render_template("chase_center.htm", events=events)
+        page = render_template("chase_center.htm", events=events).encode('utf-8')
         cache.save_raw_cache(cache.CACHED_CHASECENTER_HTML, page)
     else:
         page = cached_page
@@ -40,12 +40,12 @@ def ical_file() -> Response:
 
 
 @handlers.route("/oracle_park")
-def oracle_park() -> str:
+def oracle_park() -> bytes:
     cached_page = cache.read_raw_cache(cache.CACHED_ORACLEPARK_HTML)
     if not cached_page:
         events = oraclepark.get_events()
         events = [e for e in events if e.is_future]
-        page = render_template("oracle_park.htm", events=events)
+        page = render_template("oracle_park.htm", events=events).encode('utf-8')
         cache.save_raw_cache(cache.CACHED_ORACLEPARK_HTML, page)
     else:
         page = cached_page
