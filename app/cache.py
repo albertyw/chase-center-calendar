@@ -8,6 +8,8 @@ from app.event import Event
 
 
 CACHE_DURATION = 60 * 60
+if os.getenv('ENV') == 'development':
+    CACHE_DURATION = 1
 CACHED_CHASECENTER = 'chasecenter.json'
 CACHED_ORACLEPARK = 'oraclepark.json'
 CACHED_CHASECENTER_HTML = 'chasecenter.html'
