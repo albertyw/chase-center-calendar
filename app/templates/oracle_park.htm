@@ -15,11 +15,13 @@
           <h2>{{ event.title }}</h2>
           <h3>{{ event.date.strftime('%A %Y-%m-%d') }} {{ event.date.strftime('%I:%M %p') }} - {{ event.end.strftime('%I:%M %p') }}</h3>
           {% if event.subtitle %}
-            Subtitle: {{ event.subtitle }}<br />
+            {{ event.subtitle }}<br />
           {% endif %}
-          Location Name: {{ event.location_name }}<br />
+          {% if event.location_name %}
+            {{ event.location_name }}<br />
+          {% endif %}
           {% if event.location_type %}
-            Location Type: {{ event.location_type }}<br />
+            {{ event.location_type }}<br />
           {% endif %}
         </div>
       {% endfor %}
