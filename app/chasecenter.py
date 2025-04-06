@@ -31,7 +31,7 @@ QUERY = [
         {
           "fieldName": "datetime",
           "operator": ">",
-          "value": "2025-03-21T05:00:27.557Z",
+          "value": (datetime.datetime.now() - datetime.timedelta(days=7)).isoformat(),
         },
       ],
       "limit": 60,
