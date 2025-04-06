@@ -105,20 +105,19 @@ def deduplicate_events(
     for dothebay_event in dothebay_events:
         if dothebay_event.id in event_ids:
             break
-        different = True
+        duplicate = False
         for ticketing_event in ticketing_events:
             if ticketing_event.date.year != dothebay_event.date.year:
-                break
+                continue
             if ticketing_event.date.month != dothebay_event.date.month:
-                break
+                continue
             if ticketing_event.date.day != dothebay_event.date.day:
-                break
+                continue
             other = ticketing_event.title.split(' at ')[0]
-            if other not in dothebay_event.title:
+            if other in dothebay_event.title:
+                duplicate = True
                 break
-        else:
-            different = False
-        if different:
+        if not duplicate:
             events.append(dothebay_event)
             if dothebay_event.id:
                 event_ids.append(dothebay_event.id)
