@@ -1,4 +1,5 @@
 from flask import Blueprint, Response, render_template, send_file
+import rollbar
 from varsnap import varsnap
 
 from app import cache, chasecenter, ical, oraclepark
@@ -22,6 +23,8 @@ def chase_center() -> bytes:
     if not cached_page:
         events = chasecenter.get_events()
         events = [e for e in events if e.is_future]
+        if len(events) == 0:
+            rollbar.report_message('Chasecenter no events', 'error')
         page = render_template("chase_center.htm", events=events).encode('utf-8')
         cache.save_raw_cache(cache.CACHED_CHASECENTER_HTML, page)
     else:
@@ -34,6 +37,8 @@ def ical_file() -> Response:
     cached_file = cache.read_raw_cache(cache.CACHED_CHASECENTER_ICS)
     if not cached_file:
         events = chasecenter.get_events()
+        if len(events) == 0:
+            rollbar.report_message('Chasecenter no events', 'error')
         cal = ical.generate_calendar(events, 'Chase Center')
         cache.save_raw_cache(cache.CACHED_CHASECENTER_ICS, cal)
     return send_file(
@@ -50,6 +55,8 @@ def oracle_park() -> bytes:
     if not cached_page:
         events = oraclepark.get_events()
         events = [e for e in events if e.is_future]
+        if len(events) == 0:
+            rollbar.report_message('Oracle Park no events', 'error')
         page = render_template("oracle_park.htm", events=events).encode('utf-8')
         cache.save_raw_cache(cache.CACHED_ORACLEPARK_HTML, page)
     else:
@@ -62,6 +69,8 @@ def oracle_park_ics_file() -> Response:
     cached_file = cache.read_raw_cache(cache.CACHED_ORACLEPARK_ICS)
     if not cached_file:
         events = oraclepark.get_events()
+        if len(events) == 0:
+            rollbar.report_message('Oracle Park no events', 'error')
         cal = ical.generate_calendar(events, 'Oracle Park')
         cache.save_raw_cache(cache.CACHED_ORACLEPARK_ICS, cal)
     return send_file(
