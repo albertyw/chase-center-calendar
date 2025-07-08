@@ -7,7 +7,7 @@ An interactive GraphiQL is exposed at https://content-api-dot-chasecenter-com.ap
 
 GraphQL API for chase-center-calendar:
 
-```grqphql
+```graphql
 # , filters: {field: "fields.ticketSoldOut", value: true}
 {
   contentByType(id: "event") {
