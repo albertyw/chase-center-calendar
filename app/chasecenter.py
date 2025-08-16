@@ -59,8 +59,10 @@ def initialize_chase_event(data: RawEvent) -> Event:
     date = datetime.datetime.fromisoformat(event.date_string)
     event.date = date.astimezone(tz=TIMEZONE)
     event.location_name = cast(Optional[str], data['location'])
-    if event.location_name == 'home':
+    if event.location_name == 'home' and data['home']:
         event.location_name = 'Chase Center, San Francisco'
+    elif event.location_name == 'home':
+        event.location_name = f'{data["arena"]}, {data["city"]} {data["state"]}'
     event.duration = 3
     return event
 
