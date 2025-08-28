@@ -1,5 +1,6 @@
 import datetime
 import json
+import uuid
 from typing import List, Mapping, Optional, Union, cast
 
 import requests
@@ -16,12 +17,11 @@ RawEvent = Mapping[str, FieldValues]
 RawQueryResponse = List[RawEvent]
 
 URL = "https://t6ky1u2if62shkupuk.us-central1.gcp.squid.cloud/query/batchQueries"
+CLIENT_REQUEST_ID = str(uuid.uuid4())
 HEADERS = {
     'content-type': 'application/json',
-    'x-squid-clientid': '251798d9-6248-4b73-9c34-cc93be299472',
+    'x-squid-clientid': CLIENT_REQUEST_ID,
 }
-# This can probably be randomized
-CLIENT_REQUEST_ID = "bac50ace-5928-4f88-b364-e69a3f84d3d4"
 QUERY = [
   {
     "query": {
