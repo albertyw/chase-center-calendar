@@ -27,6 +27,7 @@ def read_raw_cache(name: str) -> Optional[bytes]:
     path = get_cache_file(name)
     try:
         if time.time() - os.path.getmtime(path) > CACHE_DURATION:
+            os.remove(path)
             return None
         with open(path, 'rb') as handle:
             data = handle.read()
