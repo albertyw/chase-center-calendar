@@ -25,13 +25,14 @@ def get_cache_file(name: str) -> Path:
 
 def read_raw_cache(name: str) -> Optional[bytes]:
     path = get_cache_file(name)
-    if not path.is_file():
+    try:
+        if time.time() - os.path.getmtime(path) > CACHE_DURATION:
+            return None
+        with open(path, 'rb') as handle:
+            data = handle.read()
+        return data
+    except OSError:
         return None
-    if time.time() - os.path.getmtime(path) > CACHE_DURATION:
-        return None
-    with open(path, 'rb') as handle:
-        data = handle.read()
-    return data
 
 
 def save_raw_cache(name: str, data: bytes) -> None:
