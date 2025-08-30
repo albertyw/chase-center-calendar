@@ -1,35 +1,42 @@
 Chase Center API Documentation
 ==============================
 
-https://chasecenter.com has a graphql API which seems to contain all dynamic information as a CMS.
+https://chasecenter.com has an API which seems to contain all dynamic information as a CMS.
 
-An interactive GraphiQL is exposed at https://content-api-dot-chasecenter-com.appspot.com/graphql.
+The API endpoint is exposed at https://t6ky1u2if62shkupuk.us-central1.gcp.squid.cloud/query/batchQueries and responds to POST requests with the body:
 
-GraphQL API for chase-center-calendar:
-
-```graphql
-# , filters: {field: "fields.ticketSoldOut", value: true}
-{
-  contentByType(id: "event") {
-    items {
-      fields {
-        ... on event {
-          id
-          slug
-          title
-          subtitle
-          date
-          locationName
-          locationType
-          ticketRequired
-          ticketAvailable
-          ticketSoldOut
-          hideRoadGame
+```json
+[
+  {
+    "query": {
+      "integrationId": "built_in_db",
+      "collectionName": "events",
+      "conditions": [
+        {
+          "fieldName": "datetime",
+          "operator": ">",
+          "value": "2025-08-22T21:04:47.263585"
         }
-      }
-    }
+      ],
+      "limit": 60,
+      "sortOrder": [
+        {
+          "asc": true,
+          "fieldName": "datetime"
+        }
+      ]
+    },
+    "clientRequestId": "85ca30bc-cf7d-4a38-9f65-f97245227517'",
+    "subscribe": false
   }
-}
+]
+```
+
+with the headers:
+
+```
+Content-Type: application/json
+X-Squid-ClientID: 85ca30bc-cf7d-4a38-9f65-f97245227517
 ```
 
 Oracle Park API Documentation
