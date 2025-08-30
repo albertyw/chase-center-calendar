@@ -21,6 +21,8 @@
             {{ event.location_type }}<br />
           {% endif %}
         </div>
+      {% else %}
+        <p>No upcoming events.</p>
       {% endfor %}
     </div>
   </div>
