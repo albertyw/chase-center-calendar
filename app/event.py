@@ -30,7 +30,6 @@ class Event():
         return self.date < other.date
 
     @property
-    @varsnap
     def is_future(self) -> bool:
         cutoff = datetime.datetime.now(TIMEZONE) - datetime.timedelta(days=1)
         return self.date > cutoff
