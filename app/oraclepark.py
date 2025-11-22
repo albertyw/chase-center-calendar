@@ -128,14 +128,14 @@ def get_events() -> List[Event]:
     events = cache.read_cache(cache.CACHED_ORACLEPARK)
     if events:
         return events
-    events = []
+    dothebay_events = []
     for url in DOTHEBAY_URLS:
         event_divs = dothebay_get_raw_events(url)
         for event_div in event_divs:
             event = dothebay_parse_event_div(event_div)
-            events.append(event)
+            dothebay_events.append(event)
     ticketing_events = ticketing_get_events()
-    events = deduplicate_events(ticketing_events, events)
+    events = deduplicate_events(ticketing_events, dothebay_events)
     events.sort()
     cache.save_cache(cache.CACHED_ORACLEPARK, events)
     return events
