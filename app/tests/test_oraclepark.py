@@ -170,11 +170,12 @@ class TestDeduplicateEvents(unittest.TestCase):
             generate_event('0'),
             generate_event('1'),
             generate_event('2', title='asdf'),
-            generate_event('3', title='Yankees vs. Giants'),
-            generate_event('4', date=datetime.datetime(2024, 3, 14, 8, 38, 0)),
-            generate_event('5', date=datetime.datetime(2024, 3, 15, 22, 38, 0)),
-            generate_event('6', date=datetime.datetime(2024, 4, 14, 22, 38, 0)),
-            generate_event('7', date=datetime.datetime(2025, 3, 14, 22, 38, 0)),
+            generate_event('2', title='asdf'),
+            generate_event('4', title='Yankees vs. Giants'),
+            generate_event('5', date=datetime.datetime(2024, 3, 14, 8, 38, 0)),
+            generate_event('6', date=datetime.datetime(2024, 3, 15, 22, 38, 0)),
+            generate_event('7', date=datetime.datetime(2024, 4, 14, 22, 38, 0)),
+            generate_event('8', date=datetime.datetime(2025, 3, 14, 22, 38, 0)),
         ]
         events = oraclepark.deduplicate_events(ticketing_events, dothebay_events)
         self.assertIn(ticketing_events[0], events)
@@ -183,9 +184,10 @@ class TestDeduplicateEvents(unittest.TestCase):
         self.assertIn(dothebay_events[2], events)
         self.assertNotIn(dothebay_events[3], events)
         self.assertNotIn(dothebay_events[4], events)
-        self.assertIn(dothebay_events[5], events)
+        self.assertNotIn(dothebay_events[5], events)
         self.assertIn(dothebay_events[6], events)
         self.assertIn(dothebay_events[7], events)
+        self.assertIn(dothebay_events[8], events)
         self.assertEqual(len(events), 5)
 
 

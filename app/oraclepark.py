@@ -104,7 +104,7 @@ def deduplicate_events(
     event_ids: List[str] = []
     for dothebay_event in dothebay_events:
         if dothebay_event.id in event_ids:
-            break
+            continue
         duplicate = False
         for ticketing_event in ticketing_events:
             if ticketing_event.date.year != dothebay_event.date.year:
