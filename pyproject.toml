@@ -9,7 +9,7 @@ dependencies = [
     "syspath==3.0.8",                             # Modify paths
 
     # Features
-    "beautifulsoup4==4.14.2",                     # HTML Parser
+    "beautifulsoup4==4.14.3",                     # HTML Parser
     "flask-sitemap==0.4.0",                       # Web sitemaps
     "icalendar==6.3.2",                           # iCal generator
     "python-dateutil==2.9.0.post0",               # Datetime manipulation
