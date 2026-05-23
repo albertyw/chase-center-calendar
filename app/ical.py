@@ -11,7 +11,7 @@ from app import event
 # @varsnap
 def generate_calendar(events: List[event.Event], location: str) -> bytes:
     modified = _get_modified()
-    cal = Calendar()
+    cal = Calendar()  # type: ignore[no-untyped-call]
     cal['summary'] = '%s Events' % location
     cal['version'] = '2.0'
     cal['prodid'] = '-//ChaseCenterCalendar.com//%s Calendar//EN' % location
@@ -29,7 +29,7 @@ def generate_calendar(events: List[event.Event], location: str) -> bytes:
 
 @varsnap
 def generate_calendar_event(event: event.Event, modified: datetime.datetime) -> Event:
-    cal_event = Event()
+    cal_event = Event()  # type: ignore[no-untyped-call]
     cal_event['uid'] = event.id
     cal_event['dtstart'] = vDatetime(event.date.astimezone(datetime.timezone.utc))
     cal_event['dtend'] = vDatetime(event.end.astimezone(datetime.timezone.utc))
