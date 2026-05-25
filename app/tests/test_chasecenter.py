@@ -145,3 +145,18 @@ class TestGetEvents(TestCase):
         self.assertFalse(mock_get_raw_events.called)
         self.assertEqual(len(events_1), len(events_2))
         self.assertEqual(events_1[0].id, events_2[0].id)
+
+    @patch('app.chasecenter.get_raw_events')
+    @patch('app.cache.get_cache_file')
+    def test_ignores_away_events(
+        self,
+        mock_file: MagicMock,
+        mock_get_raw_events: MagicMock,
+    ) -> None:
+        mock_file.return_value = Path(self.mock_file.name)
+        away_event = EXAMPLE_RAW_EVENT.copy()
+        away_event['location'] = 'away'
+        mock_get_raw_events.return_value = [EXAMPLE_RAW_EVENT, away_event]
+        events = chasecenter.get_events()
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].location_name, EXAMPLE_RAW_EVENT['location'])
