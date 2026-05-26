@@ -1,3 +1,4 @@
+import copy
 from datetime import datetime
 import json
 from pathlib import Path
@@ -154,8 +155,8 @@ class TestGetEvents(TestCase):
         mock_get_raw_events: MagicMock,
     ) -> None:
         mock_file.return_value = Path(self.mock_file.name)
-        away_event = EXAMPLE_RAW_EVENT.copy()
-        away_event['location'] = 'away'
+        away_event = copy.deepcopy(EXAMPLE_RAW_EVENT)
+        away_event['location'] = 'away'  # type: ignore
         mock_get_raw_events.return_value = [EXAMPLE_RAW_EVENT, away_event]
         events = chasecenter.get_events()
         self.assertEqual(len(events), 1)
