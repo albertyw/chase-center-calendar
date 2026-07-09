@@ -1,3 +1,4 @@
+import copy
 import datetime
 import json
 import uuid
@@ -31,7 +32,7 @@ QUERY = [
         {
           "fieldName": "datetime",
           "operator": ">",
-          "value": (datetime.datetime.now() - datetime.timedelta(days=7)).isoformat(),
+          "value": "TODO",
         },
       ],
       "limit": 60,
@@ -46,6 +47,13 @@ QUERY = [
     "subscribe": False,
   },
 ]
+
+
+def build_query() -> List[Mapping[str, object]]:
+    cutoff = (datetime.datetime.now() - datetime.timedelta(days=7)).isoformat()
+    query = copy.deepcopy(QUERY)
+    query[0]["query"]["conditions"][0]["value"] = cutoff
+    return query
 
 
 @varsnap
@@ -68,7 +76,7 @@ def initialize_chase_event(data: RawEvent) -> Event:
 
 
 def get_raw_events() -> RawQueryResponse:
-    data = json.dumps(QUERY)
+    data = json.dumps(build_query())
     response = requests.post(URL, headers=HEADERS, data=data)
     try:
         response.raise_for_status()
