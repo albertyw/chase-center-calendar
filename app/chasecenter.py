@@ -49,10 +49,10 @@ QUERY = [
 ]
 
 
-def build_query() -> List[Mapping[str, object]]:
+def build_query() -> List[dict[str, object]]:
     cutoff = (datetime.datetime.now() - datetime.timedelta(days=7)).isoformat()
     query = copy.deepcopy(QUERY)
-    query[0]["query"]["conditions"][0]["value"] = cutoff
+    query[0]["query"]["conditions"][0]["value"] = cutoff  # type: ignore
     return query
 
 
