@@ -23,6 +23,7 @@ HEADERS = {
     'content-type': 'application/json',
     'x-squid-clientid': CLIENT_REQUEST_ID,
 }
+PAGE_SIZE=60
 QUERY = [
   {
     "query": {
@@ -31,11 +32,13 @@ QUERY = [
       "conditions": [
         {
           "fieldName": "datetime",
-          "operator": ">",
+          # Inclusive so that events sharing the previous page's final
+          # datetime are not skipped; get_raw_events dedupes by uid.
+          "operator": ">=",
           "value": "TODO",
         },
       ],
-      "limit": 60,
+      "limit": PAGE_SIZE,
       "sortOrder": [
         {
           "asc": True,
@@ -49,10 +52,11 @@ QUERY = [
 ]
 
 
-def build_query() -> List[dict[str, object]]:
-    cutoff = (datetime.datetime.now() - datetime.timedelta(days=7)).isoformat()
+def build_query(cutoff: Optional[datetime.datetime]) -> List[dict[str, object]]:
+    if not cutoff:
+        cutoff = datetime.datetime.now() - datetime.timedelta(days=7)
     query = copy.deepcopy(QUERY)
-    query[0]["query"]["conditions"][0]["value"] = cutoff  # type: ignore
+    query[0]["query"]["conditions"][0]["value"] = cutoff.isoformat()  # type: ignore
     return query
 
 
@@ -76,24 +80,39 @@ def initialize_chase_event(data: RawEvent) -> Event:
 
 
 def get_raw_events() -> RawQueryResponse:
-    data = json.dumps(build_query())
-    response = requests.post(URL, headers=HEADERS, data=data)
-    try:
-        response.raise_for_status()
-    except requests.HTTPError:
-        rollbar.report_message('Chasecenter HTTP error', 'error')
-        return []
-    try:
-        raw_response = response.json()
-    except json.JSONDecodeError:
-        rollbar.report_message('Cannot parse chasecenter json', 'error')
-        return []
-    try:
-        raw_query_response = raw_response['results'][CLIENT_REQUEST_ID]['docs']
-    except KeyError:
-        rollbar.report_message('Received corrupt chasecenter json', 'error')
-        return []
-    return cast(RawQueryResponse, raw_query_response)
+    cutoff: Optional[datetime.datetime] = None
+    raw_events: RawQueryResponse = []
+    seen_ids: set[str] = set()
+    while True:
+        data = json.dumps(build_query(cutoff))
+        response = requests.post(URL, headers=HEADERS, data=data)
+        try:
+            response.raise_for_status()
+        except requests.HTTPError:
+            rollbar.report_message('Chasecenter HTTP error', 'error')
+            return []
+        try:
+            raw_response = response.json()
+        except json.JSONDecodeError:
+            rollbar.report_message('Cannot parse chasecenter json', 'error')
+            return []
+        try:
+            raw_query_response = raw_response['results'][CLIENT_REQUEST_ID]['docs']
+        except KeyError:
+            rollbar.report_message('Received corrupt chasecenter json', 'error')
+            return []
+        page = cast(RawQueryResponse, raw_query_response)
+        new_events = [e for e in page if e['uid'] not in seen_ids]
+        seen_ids.update(cast(str, e['uid']) for e in new_events)
+        raw_events += new_events
+        if len(page) < PAGE_SIZE:
+            break
+        if not new_events:
+            # A full page of already-seen events cannot advance the cutoff.
+            rollbar.report_message('Chasecenter pagination stalled', 'error')
+            break
+        cutoff = datetime.datetime.fromisoformat(cast(str, page[-1]['datetime']))
+    return raw_events
 
 
 def get_events() -> List[Event]:
