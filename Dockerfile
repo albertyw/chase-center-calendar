@@ -18,11 +18,11 @@ RUN pnpm install --prod --frozen-lockfile \
     && pnpm run build:prod
 
 
-FROM python:3.14-slim-bookworm
+FROM python:3.14-slim-trixie
 
 LABEL maintainer="git@albertyw.com"
 EXPOSE 5000
-HEALTHCHECK --interval=5s --timeout=3s CMD bin/healthcheck.sh || exit 1
+HEALTHCHECK --interval=5s --timeout=3s CMD ["bin/healthcheck.sh"]
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Set locale
