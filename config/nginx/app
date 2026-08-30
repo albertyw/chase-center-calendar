@@ -3,6 +3,7 @@
 ### Redirects ###
 server {
     listen         80;
+    listen    [::]:80;
     server_name    chasecentercalendar.com www.chasecentercalendar.com;
     return         301 https://www.chasecentercalendar.com$request_uri;
 }
@@ -10,10 +11,12 @@ server {
 # Change naked domain to www
 server {
     listen          443 ssl;
+    listen     [::]:443 ssl;
     http2           on;
     server_name     chasecentercalendar.com;
 
     include snippets/ssl.conf;
+    include snippets/headers.conf;
     resolver 127.0.0.1 [::1];
 
     rewrite         ^ https://www.chasecentercalendar.com$request_uri;
@@ -21,6 +24,7 @@ server {
 
 server {
     listen         80;
+    listen    [::]:80;
     server_name    oracleparkcalendar.com www.oracleparkcalendar.com;
     return         301 https://www.chasecentercalendar.com$request_uri;
 }
@@ -28,10 +32,12 @@ server {
 # Change naked domain to www
 server {
     listen          443 ssl;
+    listen     [::]:443 ssl;
     http2           on;
     server_name     oracleparkcalendar.com www.oracleparkcalendar.com;
 
     include snippets/ssl.conf;
+    include snippets/headers.conf;
     resolver 127.0.0.1 [::1];
 
     rewrite         ^ https://www.chasecentercalendar.com$request_uri;
@@ -42,6 +48,7 @@ server {
 
 server {
     listen          443 ssl;
+    listen     [::]:443 ssl;
     http2           on;
     server_name     www.chasecentercalendar.com;
     access_log      /var/log/nginx/chase-center-calendar/chase-center-calendar.access.log;
@@ -49,14 +56,17 @@ server {
 
     include snippets/ssl.conf;
     include snippets/gzip.conf;
+    # Included at the server level so that locations which add no headers of
+    # their own still inherit the security headers.  A location that declares
+    # any add_header must include this snippet again -- see headers.conf.
+    include snippets/headers.conf;
     resolver 127.0.0.1 [::1];
 
     location / {
-        include          snippets/headers.conf;
         proxy_pass       http://127.0.0.1:5013;
         proxy_buffering  off;
-        add_header       'Cache-Control'                 'public';
-        expires          7d;
+        # Cache-Control is left to the application: a blanket public cache here
+        # would let an intermediary store and replay per-user responses.
     }
 
     location /static/ {
