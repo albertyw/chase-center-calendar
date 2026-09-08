@@ -10,7 +10,9 @@ bind = '0.0.0.0:5000'
 # docker bridge gateway, which is the address nginx's traffic arrives from;
 # the fallback trusts nobody rather than everybody.
 forwarded_allow_ips = os.environ.get('FORWARDED_ALLOW_IPS', '127.0.0.1')
-workers = (multiprocessing.cpu_count() // 2) + 1
+# Capped because this app serves a couple of requests per second and shares its
+# host with many other containers; per-worker memory is what dominates here.
+workers = min((multiprocessing.cpu_count() // 2) + 1, 4)
 preload_app = True
 
 accesslog = '/var/www/app/logs/gunicorn/access.log'
