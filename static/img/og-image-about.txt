@@ -1,0 +1,11 @@
+og-image.png is the link-preview image (og:image). It was made from this Twemoji graphic,
+centred at 240px on a 280x280 white square:
+
+- Graphics Title: 1f3df.svg (stadium)
+- Graphics Author: Copyright 2020 Twitter, Inc and other contributors (https://github.com/jdecked/twemoji)
+- Graphics Source: https://github.com/jdecked/twemoji/blob/v15.1.0/assets/svg/1f3df.svg
+- Graphics License: CC-BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+
+It is 280x280 on purpose. Chat apps pick a small thumbnail or a full-width preview from
+the image's width: WhatsApp goes full width at 300px and up, Slack at about 400px. The
+512px favicon used before filled the whole message.
