@@ -16,7 +16,7 @@ Using [python venv](https://docs.python.org/3/library/venv.html),
 [direnv](https://github.com/direnv/direnv), and [pnpm](http://pnpm.io/).
 
 ```bash
-python3.14 -m venv env
+python3 -m venv env
 printf "source env/bin/activate\nunset PS1\n" > .envrc
 direnv allow
 pip install -e .[test]
